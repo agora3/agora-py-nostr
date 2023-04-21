@@ -1,3 +1,9 @@
+"""
+https://github.com/agora3/agora-py-nostr
+"""
+from time import sleep
+from rich.console import Console
+from rich.table import Table
 import json
 import ssl
 import time
@@ -11,6 +17,12 @@ from pynostr.event import Event, EventKind
 from pynostr.base_relay import RelayPolicy
 from pynostr.message_pool import MessagePool
 from pynostr.message_type import ClientMessageType
+from pynostr.message_type import RelayMessageType
+from pynostr.metadata import Metadata
+from pynostr.relay_list import RelayList
+from pynostr.utils import get_public_key, get_relay_list, get_timestamp
+from pynostr.encrypted_dm import EncryptedDirectMessage
+
 import tornado.ioloop
 from tornado import gen
 
@@ -18,6 +30,20 @@ from tornado import gen
 DEBUG = True
 RELAY_URL = "wss://relay.damus.io"
 
+
+console = Console()
+"""
+input_str = input("author (npub or nip05): ")
+recipient = ""
+author = get_public_key(input_str)
+
+"""
+
+"""
+@gen.coroutine
+def print_dm(message_json):
+    if DEBUG: print("[print_dm()]", message_json)
+"""
 
 
 class Client():
@@ -57,11 +83,89 @@ class Client():
             time.sleep(1)
 
 
+    def scann_relay_list(self):
+        relay_list = RelayList()
+        relay_list.append_url_list(get_relay_list())
+
+        print(f"Checking {len(relay_list.data)} relays...") # [2023/03] Checking 282 relays...
+
+        relay_list.update_relay_information(timeout=0.5)
+        relay_list.drop_empty_metadata()
+
+        print(f"Found {len(relay_list.data)} relays and start searching for metadata...") # Found 236 relays and start searching for metadata...
+
+    
+    @gen.coroutine
+    def print_dm(self, message_json):
+        if DEBUG: print("[print_dm()]", message_json)
+        message_type = message_json[0]
+        if message_type == RelayMessageType.EVENT:
+            event = Event.from_dict(message_json[2])
+            if event.kind == EventKind.ENCRYPTED_DIRECT_MESSAGE:
+                if event.has_pubkey_ref(self.sender_pk.public_key.hex()):
+                    rdm = EncryptedDirectMessage.from_event(event)
+                    rdm.decrypt(self.sender_pk.hex(), public_key_hex=self.recipient.hex())
+                    print(f"New dm received:{event.date_time()} {rdm.cleartext_content}")
+        elif message_type == RelayMessageType.OK:
+            print(message_json)
+        elif message_type == RelayMessageType.NOTICE:
+            print(message_json)
+
+
+    def send_mess(self, recipient_str, msg):
+        #sender_pk = PrivateKey.from_hex(NOSTR_SEC)
+        self.sender_pk = self.private_key
+        #public_key = sender_pk.public_key 
+        #recipient_str = input("recipient (npub or nip05): ")
+        self.recipient = get_public_key(recipient_str)
+        if DEBUG:
+            if self.recipient != "":
+                print(f"recipient is set to {self.recipient.bech32()}")
+            else:
+                raise Exception("reciever not valid")
+
+        #msg = input("message: ")
+        #relay_url = RELAY_URL # input("relay: ")
+
+        dm = EncryptedDirectMessage()
+        dm.encrypt( self.sender_pk.hex(), cleartext_content=msg, recipient_pubkey=self.recipient.hex(), )
+
+        filters = FiltersList(
+            [
+            Filters(authors=[self.recipient.hex()], kinds=[EventKind.ENCRYPTED_DIRECT_MESSAGE],since=get_timestamp(),limit=1, )
+            ]
+        ) # old-ok: limit=10
+
+        subscription_id = uuid.uuid1().hex
+        io_loop = tornado.ioloop.IOLoop.current()
+        message_pool = MessagePool(first_response_only=False)
+        policy = RelayPolicy()
+
+        r = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=self.print_dm, )
+        dm_event = dm.to_event()
+        dm_event.sign(self.sender_pk.hex())
+        
+        r.publish(dm_event.to_message())
+        r.add_subscription(subscription_id, filters)
+        
+        # temp. modifik - ToDo better
+        if DEBUG: print("[io_loop]")
+        try:            
+            io_loop.run_sync(r.connect)
+            sleep(5)
+            io_loop.stop()
+        except gen.Return:
+            pass
+        if DEBUG: print("[io_loop] stop")
+        # io_loop.stop()
+
+
     def list_events(self,limit_num = 10):
         message_pool = MessagePool(first_response_only=False)
         policy = RelayPolicy()
         io_loop = tornado.ioloop.IOLoop.current()
-        r = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=2)
+        r  = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=2)
+        #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
         filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
         self.subscription_id = uuid.uuid1().hex
 
@@ -72,17 +176,28 @@ class Client():
         except gen.Return:
             pass
         io_loop.stop()
+        
+        event_msgs = message_pool.get_all_events()
+        print(f"{r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
 
+        table = Table("date", "content")
+        for event_msg in event_msgs[::-1]:
+            table.add_row(str(event_msg.event.date_time()), event_msg.event.content)
+        console.print(table)
+
+
+        """    
         index = 0
         while message_pool.has_notices():
-            if DEBUG: print("has_notices [index]", index)
+            if DEBUG: print("-"*20, "has_notices [index]", index)
             notice_msg = message_pool.get_notice()
             print(notice_msg.content)
             index += 1
 
         index = 0    
         while message_pool.has_events():
-            if DEBUG: print("has_events [index]", index)
+            if DEBUG: print("-"*20, "has_events [index]", index)
             event_msg = message_pool.get_event()
             print(event_msg.event.content)
             index += 1
+        """
