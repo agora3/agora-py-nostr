@@ -52,20 +52,49 @@ class Client():
         self.public_key = self.private_key.public_key
         if DEBUG:
             print("[Client init]")
-            print(f"Private key: {self.private_key.bech32()}")
-            print(f"Public key: {self.public_key.bech32()}")
+            self.print_keys_info()
+            
+        self.connect_to_relay()
+          
 
+    def print_keys_info(self):
+        print(f"Private key: {self.private_key.bech32()}")
+        print("=>", self.private_key)
+        print(f"Public key:  {self.public_key.bech32()}")
+
+
+    def new_key_generate(self):
+        self.private_key = PrivateKey()
+        self.public_key = self.private_key.public_key
+        if DEBUG:
+            print("[New keys generate]") 
+            self.print_keys_info()
+
+
+    def connect_to_relay(self):
         if DEBUG:  print("[Relay manager]")
         self.relay_manager = RelayManager(timeout=6)
         if DEBUG:  print("add_relay", RELAY_URL) # ToDo extern array of relays
         self.relay_manager.add_relay(RELAY_URL)
+        """
+        self.relay_manager.add_relay("wss://nostr.mnethome.de")
+        self.relay_manager.add_relay("wss://relay.damus.io")
+        self.relay_manager.add_relay("wss://nostr-pub.wellorder.net")
+        self.relay_manager.add_relay("wss://relay.nostr.ch")
+        self.relay_manager.add_relay("wss://nostr.onsats.org")
+        self.relay_manager.open_connections({"cert_reqs": ssl.CERT_NONE})  # CERT_NONE disables ssl certificate verification
+        sleep(1)
+        """
+
+
+    def set_subscription_id(self):
+        self.subscription_id = uuid.uuid1().hex
+        if DEBUG: print("set_subscription_id",self.subscription_id)
 
 
     def subscription(self, limit_num = 10):
+        self.set_subscription_id()
         filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], limit=limit_num)])
-        
-        self.subscription_id = uuid.uuid1().hex
-        if DEBUG:  print("subscription_id", self.subscription_id)
         self.relay_manager.add_subscription_on_all_relays(self.subscription_id, filters)
  
 
@@ -161,14 +190,13 @@ class Client():
 
 
     def list_events(self,limit_num = 10):
+        self.set_subscription_id()
         message_pool = MessagePool(first_response_only=False)
         policy = RelayPolicy()
         io_loop = tornado.ioloop.IOLoop.current()
         r  = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=2)
         #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
         filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
-        self.subscription_id = uuid.uuid1().hex
-
         r.add_subscription(self.subscription_id, filters)
 
         try:
