@@ -4,10 +4,7 @@ https://github.com/agora3/agora-py-nostr
 from time import sleep
 from rich.console import Console
 from rich.table import Table
-import json
-import ssl
-import time
-import uuid
+import json, ssl, uuid
 # import codecs
 from pynostr.relay_manager import RelayManager
 from pynostr.filters import FiltersList, Filters
@@ -22,13 +19,13 @@ from pynostr.metadata import Metadata
 from pynostr.relay_list import RelayList
 from pynostr.utils import get_public_key, get_relay_list, get_timestamp
 from pynostr.encrypted_dm import EncryptedDirectMessage
-
 import tornado.ioloop
 from tornado import gen
+from agama_nostr.relays import relays_list
 
 
 DEBUG = True
-RELAY_URL = "wss://relay.damus.io"
+RELAY_URL = relays_list[0] # "wss://relay.damus.io"
 
 
 console = Console()
@@ -71,20 +68,33 @@ class Client():
             self.print_keys_info()
 
 
+    def print_myrelays_list(self):
+        for relay in relays_list:
+            print(relay)
+        print()
+
+
     def connect_to_relay(self):
         if DEBUG:  print("[Relay manager]")
         self.relay_manager = RelayManager(timeout=6)
-        if DEBUG:  print("add_relay", RELAY_URL) # ToDo extern array of relays
-        self.relay_manager.add_relay(RELAY_URL)
-        """
-        self.relay_manager.add_relay("wss://nostr.mnethome.de")
-        self.relay_manager.add_relay("wss://relay.damus.io")
-        self.relay_manager.add_relay("wss://nostr-pub.wellorder.net")
-        self.relay_manager.add_relay("wss://relay.nostr.ch")
-        self.relay_manager.add_relay("wss://nostr.onsats.org")
-        self.relay_manager.open_connections({"cert_reqs": ssl.CERT_NONE})  # CERT_NONE disables ssl certificate verification
-        sleep(1)
-        """
+        
+        for relay in relays_list:
+            self.relay_manager.add_relay(relay)
+            if DEBUG:  
+                print("add_relay", relay) 
+                sleep(1)
+ 
+
+    def scann_relay_list(self):
+        relay_list = RelayList()
+        relay_list.append_url_list(get_relay_list())
+
+        print(f"Checking {len(relay_list.data)} relays...") # [2023/03] Checking 282 relays...
+
+        relay_list.update_relay_information(timeout=0.5)
+        relay_list.drop_empty_metadata()
+
+        print(f"Found {len(relay_list.data)} relays and start searching for metadata...") # Found 236 relays and start searching for metadata...
 
 
     def set_subscription_id(self):
@@ -104,24 +114,38 @@ class Client():
         if DEBUG: print("publish", txt, event)
         self.relay_manager.publish_event(event)
         self.relay_manager.run_sync()
-        time.sleep(5) # allow the messages to send
+        sleep(5) # allow the messages to send
 
         while self.relay_manager.message_pool.has_ok_notices():
             ok_msg = self.relay_manager.message_pool.get_ok_notice()
             print("ok_msg",ok_msg)
-            time.sleep(1)
+            sleep(1)
 
 
-    def scann_relay_list(self):
-        relay_list = RelayList()
-        relay_list.append_url_list(get_relay_list())
+    def receive_event(self):
+        #filters = Filters([Filter(    authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
+        filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
+        # EventKind.SET_METADATA, EventKind.RECOMMEND_RELAY, EventKind.CONTACTS, EventKind.ENCRYPTED_DIRECT_MESSAGE, EventKind.DELETE])])
+        self.subscription_id = "my-python-event"
+        request = [ClientMessageType.REQUEST, self.subscription_id]
+        request.extend(filters.to_json_array())
 
-        print(f"Checking {len(relay_list.data)} relays...") # [2023/03] Checking 282 relays...
+        # relay_manager = RelayManager()
+        # relay_manager.add_relay("wss://nostr.mnethome.de")
+        # relay_manager.add_subscription(subscription_id, filters)
+        self.relay_manager.add_subscription_on_all_relays(self.subscription_id, filters)
+        self.relay_manager.open_connections({"cert_reqs": ssl.CERT_NONE})  # NOTE: This disables ssl certificate verification
+        sleep(1.25)  # allow the connections to open
 
-        relay_list.update_relay_information(timeout=0.5)
-        relay_list.drop_empty_metadata()
+        message = json.dumps(request)
+        self.relay_manager.publish_message(message)
+        sleep(1.5)  # allow the messages to send
 
-        print(f"Found {len(relay_list.data)} relays and start searching for metadata...") # Found 236 relays and start searching for metadata...
+        while self.relay_manager.message_pool.has_events():
+            event_msg = self.relay_manager.message_pool.get_event()
+            print(event_msg.event.content)
+
+        self.relay_manager.close_connections()
 
     
     @gen.coroutine
