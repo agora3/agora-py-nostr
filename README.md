@@ -4,6 +4,13 @@ main lib.
 
 https://github.com/holgern/pynostr
 
+inspiration
+
+https://github.com/monty888/monstr
+
+https://codeberg.org/mat/nostrfiles
+
+
 ---
 
 Install
