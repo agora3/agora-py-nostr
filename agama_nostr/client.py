@@ -44,7 +44,7 @@ def print_dm(message_json):
 
 
 class Client():
-    def __init__(self, nostr_sec):
+    def __init__(self, nostr_sec=None):
         self.private_key = PrivateKey.from_hex(nostr_sec)
         self.public_key = self.private_key.public_key
         if DEBUG:
@@ -60,12 +60,13 @@ class Client():
         print(f"Public key:  {self.public_key.bech32()}")
 
 
-    def new_key_generate(self):
+    def new_key_generate(self, print_out=True):
         self.private_key = PrivateKey()
         self.public_key = self.private_key.public_key
-        if DEBUG:
+        if print_out:
             print("[New keys generate]") 
             self.print_keys_info()
+        return self.public_key.bech32(), self.private_key
 
 
     def print_myrelays_list(self):
@@ -82,7 +83,7 @@ class Client():
             self.relay_manager.add_relay(relay)
             if DEBUG:  
                 print("add_relay", relay) 
-                sleep(1)
+                sleep(0.3)
  
 
     def scann_relay_list(self):
@@ -114,12 +115,23 @@ class Client():
         if DEBUG: print("publish", txt, event)
         self.relay_manager.publish_event(event)
         self.relay_manager.run_sync()
-        sleep(5) # allow the messages to send
+        sleep(3) # allow the messages to send
 
         while self.relay_manager.message_pool.has_ok_notices():
             ok_msg = self.relay_manager.message_pool.get_ok_notice()
             print("ok_msg",ok_msg)
             sleep(1)
+
+
+    """
+    def publish_note(self, URL:str): # temp / todo
+        event = Event(self.private_key, URL)
+        self.private_key.sign_event(event) #? err. noEx
+
+        self.relay_manager.publish_event(event)
+        sleep(3)
+        self.relay_manager.close_connections()
+    """
 
 
     def receive_event(self):
@@ -163,6 +175,15 @@ class Client():
             print(message_json)
         elif message_type == RelayMessageType.NOTICE:
             print(message_json)
+
+    """
+    def nostr_send_dm(self, msg:str):
+        dm = EncryptedDirectMessage(
+            recipient_pubkey=self.private_key.public_key.hex(),
+            cleartext_content=msg)
+        self.private_key.sign_event(dm)
+        self.relay_manager.publish_event(dm)
+    """
 
 
     def send_mess(self, recipient_str, msg):

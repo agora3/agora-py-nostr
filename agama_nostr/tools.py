@@ -13,6 +13,15 @@ def print_head(label="head"):
     print("-"*WIDTH)
 
 
+def short_str(s,l=10): 
+    try:
+        if len(s)>l*2+12: # 32+
+            return str(s[:l])+"..."+str(s[-l:])
+        else:
+            return s
+    except:
+        return s
+
 
 def get_relay_information(url: str, timeout: float = 2, add_url: bool = True):
     # NIP-11 // 'pynostr'
