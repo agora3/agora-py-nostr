@@ -2,19 +2,19 @@
 my fav relays list
 2023/03
 """
+nip_11_struct = [ "name","description","pubkey","contact","supported_nips","software","version"]
+
 
 relays_list = [
 "wss://relay.damus.io",
 "wss://nostr.mnethome.de",
+"wss://relay.snort.social/",
+#"wss://nostr.wine/",
+"wss://nos.lol/",
 "wss://nostr-pub.wellorder.net",
 #"wss://relay.nostr.ch",
 #"wss://nostr.onsats.org",
 ]
-
-
-"""
-2023/04 - 100 relays
-"""
 
 
 relays_big_list = [

@@ -22,11 +22,12 @@ from pynostr.encrypted_dm import EncryptedDirectMessage
 import tornado.ioloop
 from tornado import gen
 from agama_nostr.relays import relays_list
+from agama_nostr.tools import get_relay_information
 
 
 DEBUG = True
 RELAY_URL = relays_list[0] # "wss://relay.damus.io"
-
+nip_11_struct_select = ["name","description","software"]
 
 console = Console()
 """
@@ -44,15 +45,16 @@ def print_dm(message_json):
 
 
 class Client():
-    def __init__(self, nostr_sec=None):
+    def __init__(self, nostr_sec=None, relays=True):
         self.private_key = PrivateKey.from_hex(nostr_sec)
         self.public_key = self.private_key.public_key
         if DEBUG:
             print("[Client init]")
             self.print_keys_info()
-            
-        self.connect_to_relay()
-          
+
+        if relays:    
+            self.connect_to_relay()
+
 
     def print_keys_info(self):
         print(f"Private key: {self.private_key.bech32()}")
@@ -81,9 +83,17 @@ class Client():
         
         for relay in relays_list:
             self.relay_manager.add_relay(relay)
-            if DEBUG:  
-                print("add_relay", relay) 
+            if DEBUG:
+                print("-"*39)  
+                print("[add_relay]", relay) 
                 sleep(0.3)
+
+                relay_data = get_relay_information(relay)
+                try:
+                    for info in nip_11_struct_select:
+                        print("{:<13s} - {}".format(info,str(relay_data.get(info))))
+                except:
+                    print("Err. parse relay_data")
  
 
     def scann_relay_list(self):

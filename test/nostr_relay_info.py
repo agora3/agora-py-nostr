@@ -4,7 +4,7 @@ from agama_nostr.tools import get_relay_information, print_head, short_str
 from agama_nostr.relays import relays_list, relays_big_list
 
 
-DEBUG = False
+DEBUG = True
 
 # relay_url = "wss://relay.damus.io"
 
@@ -18,10 +18,10 @@ DEBUG = False
  "version": <string version identifier>
 """
 
-nip_11_struct = [ "name","description","pubkey","contact","supported_nips","software","version"]
+nip_11_struct = [ "name","description","pubkey","contact","supported_nips","software","version","limitation"]
 
 i = 1
-for relay_url in relays_big_list: # relays_list:
+for relay_url in relays_list: # relays_big_list:
     print_head(str(i) + ") " +relay_url)
     i += 1
     
@@ -29,7 +29,7 @@ for relay_url in relays_big_list: # relays_list:
 
     if DEBUG:
         print("[relay_json]")
-        print("relay_data")
+        print("relay_data:", relay_data)
         print("[relay_dict]")
     try:
         for info in nip_11_struct:
