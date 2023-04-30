@@ -1,4 +1,4 @@
-relays INFO - ver.0.1 / 2023-04-29
+relays INFO - ver.0.1 / 2023-04-30
 =======================================
 ---------------------------------------
 1) wss://relay.damus.io
@@ -91,14 +91,6 @@ limitation    - None
 ---------------------------------------
 9) wss://node01.nostress.cc
 ---------------------------------------
-name          - nostress-node01
-description   - Nostress.cc first official NOSTR relay.
-pubkey        - npub1hr52fyjfc2p0sax0pu8cp6php5sml76cal6qzpes2qe993y74htqjnwvau
-contact       - nostresscc@proton.me
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
-limitation    - {'payment_required': False}
 ---------------------------------------
 10) wss://nos.lol
 ---------------------------------------
@@ -157,14 +149,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 15) wss://nostr-1.nbo.angani.co
 ---------------------------------------
-name          - nostr-1.nbo.angani.co
-description   - A nostr relay powered by Angani Cloud.
-pubkey        - npub146s4wg7nr5fp5fzsyl9y9sqzrez0twl939gwtk82gravzxf92susdzrwj7
-contact       - infrastructure@angani.co
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.16.0
-limitation    - None
 ---------------------------------------
 16) wss://nostr3.actn.io
 ---------------------------------------
@@ -393,14 +377,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 36) wss://nostr.hackerman.pro
 ---------------------------------------
-name          - nostr-hackerman-pro
-description   - DM me if you need verification, it's for free. Any small tip is highly appreciated for server maintenance. LNURL: ounos@getalby.com. Thank you!
-pubkey        - npub1yz4laqtnm0s7qlpx5tw5esgfu660nsf9q2k5a6py9r9d2zak4pnswepeln
-contact       - ounos@pm.me
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 26]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.7.15
-limitation    - None
 ---------------------------------------
 37) wss://nostr.handyjunky.com
 ---------------------------------------
@@ -680,14 +656,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 62) wss://nostr.sectiontwo.org
 ---------------------------------------
-name          - Bankers Bad Dream
-description   - BBD private relay
-pubkey        - 94f1782e440430f2d209f2c46f61fd5b38b9fe8798cc2ff840e9b863607fb1be
-contact       - bankersbaddream@sectiontwo.org
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
-limitation    - {'payment_required': False}
 ---------------------------------------
 63) wss://nostr.semisol.dev
 ---------------------------------------
@@ -994,7 +962,7 @@ pubkey        - a4ec6308a9c3a9e5eb6d02ac4d7ea64701e294c598010d1dd5e53a838aae1bea
 contact       - mailto:yo@nostr.scot
 supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
 software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
+version       - 0.8.9
 limitation    - {'payment_required': False}
 ---------------------------------------
 91) wss://relay.austrich.net
