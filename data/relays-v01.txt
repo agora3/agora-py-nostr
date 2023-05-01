@@ -1,4 +1,4 @@
-relays INFO - ver.0.1 / 2023-04-30
+relays INFO - ver.0.1/2023-05-01
 =======================================
 ---------------------------------------
 1) wss://relay.damus.io
@@ -21,7 +21,7 @@ contact       - info@plebstr.com
 supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
 software      - git+https://github.com/Cameri/nostream.git
 version       - 1.22.6
-limitation    - {'max_message_length': 524288, 'max_subscriptions': 8, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
+limitation    - {'max_message_length': 524288, 'max_subscriptions': 8, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 3) wss://relay.nostrplebs.com
 ---------------------------------------
@@ -149,6 +149,14 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 15) wss://nostr-1.nbo.angani.co
 ---------------------------------------
+name          - nostr-1.nbo.angani.co
+description   - A nostr relay powered by Angani Cloud.
+pubkey        - npub146s4wg7nr5fp5fzsyl9y9sqzrez0twl939gwtk82gravzxf92susdzrwj7
+contact       - infrastructure@angani.co
+supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33]
+software      - git+https://github.com/Cameri/nostream.git
+version       - 1.16.0
+limitation    - None
 ---------------------------------------
 16) wss://nostr3.actn.io
 ---------------------------------------
@@ -530,8 +538,8 @@ pubkey        - b2d670de53b27691c0c3400225b65c35a26d06093bcc41f48ffc71e0907f9d4a
 contact       - mailto:oxtrr@protonmail.com
 supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
 software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
-limitation    - None
+version       - 0.8.9
+limitation    - {'payment_required': False}
 ---------------------------------------
 51) wss://nostr-pub1.southflorida.ninja
 ---------------------------------------
@@ -871,7 +879,7 @@ limitation    - None
 name          - Nostr.Band Relay
 description   - This is a fast relay with full archive of textual posts
 pubkey        - 3356de61b39647931ce8b2140b2bab837e0810c0ef515bbe92de0248040b8bdd
-contact       - mailto:admin@realsearch.cc
+contact       - mailto:admin@nostr.band
 supported_nips - [1, 11, 12, 15, 20, 22, 33, 45, 50]
 software      - https://relay.nostr.band
 version       - 0.2
