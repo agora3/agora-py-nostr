@@ -16,12 +16,15 @@ https://codeberg.org/mat/nostrfiles
 Install
 
 ```
+git clone https://github.com/agora3/agora-py-nostr.git
+cd agora-py-nostr
 python3 -m venv venv  
 source venv/bin/activate
-git clone https://github.com/agora3/agora-py-nostr.git
-// pip install -r requirements.txt
-pip install pynostr 
+pip install -r requirements.txt
+// pip install pynostr 
 export PYTHONPATH="$PYTHONPATH:./"
+
+
 ```
 
 Basic usage (example)
