@@ -1,4 +1,4 @@
-relays INFO - ver.0.1/2023-05-01
+relays INFO - ver.0.1/2023-04-03
 =======================================
 ---------------------------------------
 1) wss://relay.damus.io
@@ -149,14 +149,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 15) wss://nostr-1.nbo.angani.co
 ---------------------------------------
-name          - nostr-1.nbo.angani.co
-description   - A nostr relay powered by Angani Cloud.
-pubkey        - npub146s4wg7nr5fp5fzsyl9y9sqzrez0twl939gwtk82gravzxf92susdzrwj7
-contact       - infrastructure@angani.co
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.16.0
-limitation    - None
 ---------------------------------------
 16) wss://nostr3.actn.io
 ---------------------------------------
@@ -788,14 +780,6 @@ limitation    - None
 ---------------------------------------
 74) wss://nostr.zaprite.io
 ---------------------------------------
-name          - Zaprite Notifications
-description   - Provides notifications only for Zaprite.com users.
-pubkey        - 3c512e90e74db56b61fd0e8c8b692354d61e6d67383873c0699964b560b9b0d5
-contact       - mailto:support@zaprite.com
-supported_nips - [1, 2, 11, 15, 16]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.6.1
-limitation    - None
 ---------------------------------------
 75) wss://nostr.zebedee.cloud
 ---------------------------------------
@@ -843,14 +827,6 @@ limitation    - None
 ---------------------------------------
 79) wss://relay.ryzizub.com
 ---------------------------------------
-name          - relay.ryzizub.com
-description   - A nostr relay written in Typescript.
-pubkey        - c83723d33fa86c8f01b254b1dcaaa025b2ca659320950d044d22c41b5d1daf29
-contact       - dominik@simonik.me
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
-limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 80) wss://relay.n057r.club
 ---------------------------------------
@@ -1030,14 +1006,6 @@ limitation    - None
 ---------------------------------------
 96) wss://relay.ryzizub.com
 ---------------------------------------
-name          - relay.ryzizub.com
-description   - A nostr relay written in Typescript.
-pubkey        - c83723d33fa86c8f01b254b1dcaaa025b2ca659320950d044d22c41b5d1daf29
-contact       - dominik@simonik.me
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
-limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 97) wss://nostr-01.dorafactory.org
 ---------------------------------------
