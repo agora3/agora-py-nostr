@@ -132,16 +132,24 @@ class Client():
             print("ok_msg",ok_msg)
             sleep(1)
 
+    # publish_note / thread
+    def replay_event(self, original_note_id, original_note_author_pubkey, txt="Reply: Hello Nostr"):
+        reply = Event(content=txt,)
+        # create 'e' tag reference to the note you're replying to
+        reply.add_event_ref(original_note_id)
+        # create 'p' tag reference to the pubkey you're replying to
+        reply.add_pubkey_ref(original_note_author_pubkey)
+        reply.sign(self.private_key.hex())
 
-    """
-    def publish_note(self, URL:str): # temp / todo
-        event = Event(self.private_key, URL)
-        self.private_key.sign_event(event) #? err. noEx
+        self.relay_manager.publish_event(reply)
+        self.relay_manager.run_sync()
+        sleep(3) # allow the messages to send
+        #self.relay_manager.close_connections()
 
-        self.relay_manager.publish_event(event)
-        sleep(3)
-        self.relay_manager.close_connections()
-    """
+        while self.relay_manager.message_pool.has_ok_notices():
+            ok_msg = self.relay_manager.message_pool.get_ok_notice()
+            print("ok_msg",ok_msg)
+            sleep(1)
 
 
     def receive_event(self):

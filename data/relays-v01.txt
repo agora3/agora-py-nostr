@@ -1,4 +1,4 @@
-relays INFO - ver.0.1/2023-04-03
+relays INFO - ver.0.1/2023-05-06
 =======================================
 ---------------------------------------
 1) wss://relay.damus.io
@@ -89,8 +89,16 @@ software      - https://github.com/lpicanco/knostr
 version       - 0.5
 limitation    - None
 ---------------------------------------
-9) wss://node01.nostress.cc
+9) wss://nostr.petrkr.net/strfry
 ---------------------------------------
+name          - petrkr strfry
+description   - Teting C++ strfry implementation.
+pubkey        - unset
+contact       - nostr.petrkr.net
+supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
+software      - git+https://github.com/hoytech/strfry.git
+version       - v113-e4e79af
+limitation    - None
 ---------------------------------------
 10) wss://nos.lol
 ---------------------------------------
@@ -149,6 +157,14 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 15) wss://nostr-1.nbo.angani.co
 ---------------------------------------
+name          - nostr-1.nbo.angani.co
+description   - A nostr relay powered by Angani Cloud.
+pubkey        - npub146s4wg7nr5fp5fzsyl9y9sqzrez0twl939gwtk82gravzxf92susdzrwj7
+contact       - infrastructure@angani.co
+supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33]
+software      - git+https://github.com/Cameri/nostream.git
+version       - 1.16.0
+limitation    - None
 ---------------------------------------
 16) wss://nostr3.actn.io
 ---------------------------------------
@@ -413,14 +429,14 @@ limitation    - None
 ---------------------------------------
 40) wss://nostrich.friendship.tw
 ---------------------------------------
-name          - nostrich.tw
-description   - A nostr-rs-relay with limited bandwidth -- whitelist active, updated hourly
+name          - nostrich friendship Taiwan
+description   - 台灣公用nostr-rs-relay 大家一起來玩nostr . 隨時垃圾留言會自動刷清
 pubkey        - 0ad59360ff1b6df2147dd8534c7e0c8a04b5938e80ab805ec79d7748240c6860
 contact       - None
 supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
 software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.7
-limitation    - None
+version       - 0.8.9
+limitation    - {'payment_required': False}
 ---------------------------------------
 41) wss://nostr.kollider.xyz
 ---------------------------------------
@@ -659,14 +675,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 63) wss://nostr.semisol.dev
 ---------------------------------------
-name          - nostr.semisol.dev
-description   - nostr.semisol.dev
-pubkey        - 52b4a076bcbbbdc3a1aefa3735816cf74993b1b8db202b01c883c58be7fad8bd
-contact       - nostr@semisol.dev
-supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
-software      - git+https://github.com/hoytech/strfry.git
-version       - v107-f192adb
-limitation    - None
 ---------------------------------------
 64) wss://nostr.shawnyeager.net
 ---------------------------------------

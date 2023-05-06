@@ -2,11 +2,15 @@ import json
 from datetime import datetime
 from agama_nostr.tools import get_relay_information, print_head, short_str
 # from pynostr.relay_list import RelayList
-from agama_nostr.relays import relays_list, relays_big_list, nip_11_struct_adv
+from agama_nostr.relays import relays_list100 , relays_big_list, nip_11_struct_adv
 
 
 DEBUG = True
 LOG = True
+
+#---test---
+#>>> len(relays_big_list)
+#277 
 
 logFile = "data/"+datetime.now().strftime("%Y%m%d_%H%M%Srelays.txt")
 
@@ -19,13 +23,13 @@ def log_to_file(str, log=LOG):
 
 
 # relay_url = "wss://relay.damus.io"
-log_to_file("relays INFO - ver.0.1/2023-04")
+log_to_file("relays INFO - ver.0.1/2023-05")
 log_to_file("="*39)
 
 
 i = 1
 # for relay_url in relays_list: 
-for relay_url in relays_big_list:
+for relay_url in relays_list100:
     h_str = str(i) + ") " +relay_url
     #print_head(str)
     log_to_file("-"*39)
