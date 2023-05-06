@@ -30,6 +30,19 @@ export PYTHONPATH="$PYTHONPATH:./"
 Basic usage (example)
 
 ```
+setup your secret key in the file ./agama_nostr/nostr_key.py
+
+NOSTR_SEC = "------ YOUR SECRET KEY -------"
+
+or create new one:
+
+$ python test/nostr_key_gen.py
+
+
+
+
+your project:
+
 from agama_nostr.client import Client 
 from agama_nostr.nostr_key import NOSTR_SEC
 
