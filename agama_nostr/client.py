@@ -46,8 +46,13 @@ def print_dm(message_json):
 
 class Client():
     def __init__(self, nostr_sec=None, relays=True):
-        self.private_key = PrivateKey.from_hex(nostr_sec)
-        self.public_key = self.private_key.public_key
+        try:
+            self.private_key = PrivateKey.from_hex(nostr_sec)
+            self.public_key = self.private_key.public_key
+        except:
+            print("Err. private_key")
+            self.private_key = None
+            self.public_key = None
         if DEBUG:
             print("[Client init]")
             self.print_keys_info()
@@ -57,9 +62,12 @@ class Client():
 
 
     def print_keys_info(self):
-        print(f"Private key: {self.private_key.bech32()}")
-        print("=>", self.private_key)
-        print(f"Public key:  {self.public_key.bech32()}")
+        try:
+            print(f"Private key: {self.private_key.bech32()}")
+            print("=>", self.private_key)
+            print(f"Public key:  {self.public_key.bech32()}")
+        except:
+            print("Err. print_keys_info")
 
 
     def new_key_generate(self, print_out=True):
