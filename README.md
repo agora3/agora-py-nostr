@@ -39,3 +39,5 @@ nostr_client = Client(NOSTR_SEC)
 ...
 ```
 
+Agora_Zero: npub1ag0ra0shs0sd24wqwqdceu2yzj3uj5xa53ge2vstz0nyf49ez68qqq2jgj
+
