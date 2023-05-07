@@ -32,7 +32,7 @@ NOSTR_SEC = "------ YOUR SECRET KEY -------"
 
 or create new one:
 
-$ python test/nostr_key_gen.py
+$ python3 nostr_key_gen.py
 
 ---------------------------------------
 ----- new_key_generate
