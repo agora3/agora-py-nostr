@@ -18,6 +18,12 @@ Install
 ```
 git clone https://github.com/agora3/agora-py-nostr.git
 cd agora-py-nostr
+//--- sh:
+chmod +x initial_setup.sh
+./initial_setup.sh
+
+
+//---- or:
 python3 -m venv venv  
 source venv/bin/activate
 pip install -r requirements.txt
@@ -40,6 +46,14 @@ or create new one:
 
 $ python test/nostr_key_gen.py
 
+---------------------------------------
+----- new_key_generate
+---------------------------------------
+new pub.key: npub1ag0ra0shs0sd24wqwqdceu2yzj3uj5xa53ge2vstz0nyf49ez68qqq2jgj
+NOSTR_SEC => 98b7b......................................................7a1f4
+
+(you can save the NOSTR_SEC key in the file: ./agama_nostr/nostr_key.py)
+ 
 
 
 
