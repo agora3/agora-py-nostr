@@ -22,8 +22,10 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 // pip install pynostr 
-export PYTHONPATH="$PYTHONPATH:./"
 
+export PYTHONPATH="$PYTHONPATH:./"
+cp agama_nostr/nostr_key.py.tmp agama_nostr/nostr_key.py
+python nostr_key_gen.py 
 
 ```
 
