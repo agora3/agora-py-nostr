@@ -1,29 +1,17 @@
 # agora-py-nostr
 
-main lib.
+simple Python Nostr Client
 
-https://github.com/holgern/pynostr
-
-inspiration
-
-https://github.com/monty888/monstr
-
-https://codeberg.org/mat/nostrfiles
-
-
----
-
-Install
+## Install
 
 ```
 git clone https://github.com/agora3/agora-py-nostr.git
 cd agora-py-nostr
-//--- sh:
+// sh:
 chmod +x initial_setup.sh
 ./initial_setup.sh
 
-
-//---- or:
+// or:
 python3 -m venv venv  
 source venv/bin/activate
 pip install -r requirements.txt
@@ -32,8 +20,8 @@ pip install -r requirements.txt
 export PYTHONPATH="$PYTHONPATH:./"
 cp agama_nostr/nostr_key.py.tmp agama_nostr/nostr_key.py
 python nostr_key_gen.py 
-
 ```
+
 
 Basic usage (example)
 
@@ -50,7 +38,7 @@ $ python test/nostr_key_gen.py
 ----- new_key_generate
 ---------------------------------------
 new pub.key: npub1ag0ra0shs0sd24wqwqdceu2yzj3uj5xa53ge2vstz0nyf49ez68qqq2jgj
-NOSTR_SEC => 98b7b......................................................7a1f4
+NOSTR_SEC => 98b7b......................................................7a1f5
 
 (you can save the NOSTR_SEC key in the file: ./agama_nostr/nostr_key.py)
  
@@ -67,6 +55,20 @@ nostr_client = Client(NOSTR_SEC)
 
 ...
 ```
+
+## links
+
+main lib.
+
+https://github.com/holgern/pynostr
+
+inspiration
+
+https://github.com/monty888/monstr
+
+https://codeberg.org/mat/nostrfiles
+
+---
 
 Agora_Zero: npub1ag0ra0shs0sd24wqwqdceu2yzj3uj5xa53ge2vstz0nyf49ez68qqq2jgj
 
