@@ -1,5 +1,6 @@
 """
 https://github.com/agora3/agora-py-nostr
+
 """
 from time import sleep
 from rich.console import Console
@@ -24,6 +25,7 @@ from tornado import gen
 from agama_nostr.relays import relays_list
 from agama_nostr.tools import get_relay_information
 
+__version__ = "0.2.0"
 
 DEBUG = True
 RELAY_URL = relays_list[0] # "wss://relay.damus.io"

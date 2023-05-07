@@ -21,6 +21,16 @@ def short_str(s,l=10):
             return s
     except:
         return s
+    
+
+def new_key_generate(print_out=True):
+        from pynostr.key import PrivateKey
+        private_key = PrivateKey()
+        public_key = private_key.public_key
+        if print_out:
+            print("[tools] New keys generate") 
+            #self.print_keys_info()
+        return public_key.bech32(), private_key
 
 
 def get_relay_information(url: str, timeout: float = 2, add_url: bool = True):
