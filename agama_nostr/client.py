@@ -24,7 +24,7 @@ from tornado import gen
 from agama_nostr.relays import relays_list
 from agama_nostr.tools import get_relay_information
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 
 DEBUG = True
@@ -61,7 +61,9 @@ class Client():
 
         if relays:    
             self.connect_to_relay()
-
+        
+        self.policy = RelayPolicy()
+        
 
     def print_keys_info(self):
         try:
@@ -91,6 +93,8 @@ class Client():
         if DEBUG:  print("[Relay manager] connect_to_relays")
         self.relay_manager = RelayManager(timeout=6)
         self.message_pool = MessagePool(first_response_only=False)
+        self.io_loop = tornado.ioloop.IOLoop.current()
+        self.set_subscription_id()
         
         for relay in relays_list:
             self.relay_manager.add_relay(relay)
@@ -106,6 +110,13 @@ class Client():
                 except:
                     print("Err. parse relay_data")
  
+
+    def close_connections(self):
+        if DEBUG: print("[class DEBUG] relay_manager.close_connections")
+        self.relay_manager.close_connections()
+        #self.io_loop.remove_timeout
+        #self.io_loop.close()
+
 
     def scann_relay_list(self):
         relay_list = RelayList()
@@ -180,17 +191,14 @@ class Client():
  
 
     def single_relay_event(self):        
-        io_loop = tornado.ioloop.IOLoop.current()
-        policy = RelayPolicy()
-
-        r = Relay(RELAY_URL, self.message_pool, io_loop, policy, timeout=5)
+        r = Relay(RELAY_URL, self.message_pool, self.io_loop, self.policy, timeout=5)
         r.add_subscription(self.subscription_id, self.filters)
 
         try:
-            io_loop.run_sync(r.connect)
+            self.io_loop.run_sync(r.connect) # multi: asyncio.exceptions.TimeoutError: Operation timed out after None seconds
         except gen.Return:
             pass
-        io_loop.stop()
+        self.io_loop.stop()
 
         """
         index = 0
@@ -237,9 +245,9 @@ class Client():
 
 
     def receive_event(self):
-        self.filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
+        ##self.filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
         # EventKind.SET_METADATA, EventKind.RECOMMEND_RELAY, EventKind.CONTACTS, EventKind.ENCRYPTED_DIRECT_MESSAGE, EventKind.DELETE])])
-        self.subscription_id = "my-python-event"
+        ##self.subscription_id = "my-python-event"
         request = [ClientMessageType.REQUEST, self.subscription_id]
         request.extend(self.filters.to_json_array())
 
@@ -311,11 +319,9 @@ class Client():
         ) # old-ok: limit=10
 
         subscription_id = uuid.uuid1().hex
-        io_loop = tornado.ioloop.IOLoop.current()
-        message_pool = MessagePool(first_response_only=False)
-        policy = RelayPolicy()
+        #message_pool = MessagePool(first_response_only=False)
 
-        r = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=self.print_dm, )
+        r = Relay(RELAY_URL, self.message_pool, self.io_loop, self.policy, timeout=5, close_on_eose=False, message_callback=self.print_dm, )
         dm_event = dm.to_event()
         dm_event.sign(self.sender_pk.hex())
         
@@ -325,9 +331,9 @@ class Client():
         # temp. modifik - ToDo better
         if DEBUG: print("[class DEBUG] io_loop")
         try:            
-            io_loop.run_sync(r.connect)
+            self.io_loop.run_sync(r.connect)
             sleep(5)
-            io_loop.stop()
+            self.io_loop.stop()
         except gen.Return:
             pass
         if DEBUG: print("io_loop.stop")
@@ -336,11 +342,9 @@ class Client():
 
     def list_events_old(self):
         self.set_subscription_id()
-        message_pool = MessagePool(first_response_only=False)
-        policy = RelayPolicy()
-        io_loop = tornado.ioloop.IOLoop.current()
-        
-        r = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=5)
+        #message_pool = MessagePool(first_response_only=False)
+       
+        r = Relay(RELAY_URL, self.message_pool, self.io_loop, self.policy, timeout=5)
         #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
 
         #filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
@@ -350,13 +354,13 @@ class Client():
         #self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
 
         try:
-            io_loop.run_sync(r.connect)
+            self.io_loop.run_sync(r.connect)
             #self.relay_manager.run_sync()
         except gen.Return:
             pass
-        io_loop.stop()
+        self.io_loop.stop()
         
-        event_msgs = message_pool.get_all_events()
+        event_msgs = self.message_pool.get_all_events()
         print(f"{r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
         #print(f"x returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
 
@@ -368,10 +372,8 @@ class Client():
 
 
     def list_events(self):
-        self.set_subscription_id()
-        message_pool = MessagePool(first_response_only=False)
-        policy = RelayPolicy()
-        io_loop = tornado.ioloop.IOLoop.current()
+        self.set_subscription_id()        
+        #self.io_loop = tornado.ioloop.IOLoop.current()
         
         ##r  = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=5)
         #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
@@ -391,7 +393,7 @@ class Client():
         ##io_loop.stop()
         """
         
-        event_msgs = message_pool.get_all_events()
+        event_msgs = self.message_pool.get_all_events()
         ##print(f"{r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
         print(f"x returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
 

@@ -2,7 +2,9 @@
 basic tools for agama_nost client
 
 """
+import time, datetime
 
+DEBUG = True
 WIDTH = 39
 
 
@@ -21,16 +23,16 @@ def short_str(s,l=10):
             return s
     except:
         return s
-    
 
-def new_key_generate(print_out=True):
-        from pynostr.key import PrivateKey
-        private_key = PrivateKey()
-        public_key = private_key.public_key
-        if print_out:
-            print("[tools] New keys generate") 
-            #self.print_keys_info()
-        return public_key.bech32(), private_key
+
+def timestamp_from_now():
+    current_timestamp = time.time()
+    if DEBUG: print("current_timestamp",current_timestamp)
+    one_month_from_now = datetime.datetime.fromtimestamp(current_timestamp) + datetime.timedelta(days=30)
+    one_month_from_now_timestamp = int(one_month_from_now.timestamp())
+    one_week_from_now = datetime.datetime.fromtimestamp(current_timestamp) + datetime.timedelta(days=7)
+    one_week_from_now_timestamp = int(one_week_from_now.timestamp())
+    return one_week_from_now_timestamp, one_month_from_now_timestamp
 
 
 def get_relay_information(url: str, timeout: float = 2, add_url: bool = True):
