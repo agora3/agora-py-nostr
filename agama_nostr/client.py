@@ -1,6 +1,5 @@
 """
 https://github.com/agora3/agora-py-nostr
-
 """
 from time import sleep
 from rich.console import Console
@@ -9,7 +8,7 @@ import json, ssl, uuid
 # import codecs
 from pynostr.relay_manager import RelayManager
 from pynostr.filters import FiltersList, Filters
-from pynostr.key import PrivateKey
+from pynostr.key import PrivateKey, PublicKey
 from pynostr.relay import Relay
 from pynostr.event import Event, EventKind 
 from pynostr.base_relay import RelayPolicy
@@ -25,10 +24,11 @@ from tornado import gen
 from agama_nostr.relays import relays_list
 from agama_nostr.tools import get_relay_information
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
+
 
 DEBUG = True
-RELAY_URL = relays_list[0] # "wss://relay.damus.io"
+RELAY_URL = relays_list[0] # single main relay "wss://relay.damus.io"
 nip_11_struct_select = ["name","description","software"]
 
 console = Console()
@@ -88,8 +88,9 @@ class Client():
 
 
     def connect_to_relay(self):
-        if DEBUG:  print("[Relay manager]")
+        if DEBUG:  print("[Relay manager] connect_to_relays")
         self.relay_manager = RelayManager(timeout=6)
+        self.message_pool = MessagePool(first_response_only=False)
         
         for relay in relays_list:
             self.relay_manager.add_relay(relay)
@@ -123,11 +124,84 @@ class Client():
         if DEBUG: print("set_subscription_id",self.subscription_id)
 
 
-    def subscription(self, limit_num = 10):
-        self.set_subscription_id()
-        filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], limit=limit_num)])
-        self.relay_manager.add_subscription_on_all_relays(self.subscription_id, filters)
+    def set_filter_meta(self, nostr_user=""):
+        if nostr_user == "":
+            author = self.private_key.public_key.hex()            
+        else:
+            author = PublicKey.from_npub(nostr_user).hex()
+          
+        self.filters = FiltersList([Filters(authors=[author],kinds=[EventKind.SET_METADATA])])
+        if DEBUG:
+            print("[class DEBUG] set_filters",str(self.filters))
+            print("- nostr_user_hex",author)
+        
+
+    def set_filters(self, since=0,limit_num=10):
+        """
+        NIP-01 filtering. Explicitly supports "#e" and "#p" tag filters via `event_refs`
+        and `pubkey_refs`. Arbitrary NIP-12 single-letter tag filters are also supported via
+        `add_arbitrary_tag`. If a particular single-letter tag gains prominence, explicit
+        support should be added. For example:
+        
+        # arbitrary tag
+        filter.add_arbitrary_tag('t', [hashtags])
+
+        # promoted to explicit support
+        Filters(hashtag_refs=[hashtags])
+        :param ids: List[str]
+        :param kinds: List[EventKind]
+        :param authors: List[str]
+        :param since: int
+        :param until: int
+        :param event_refs: List[str]
+        :param pubkey_refs: List[str]
+        :param limit: int
+
+        # EventKind.SET_METADATA, EventKind.RECOMMEND_RELAY, EventKind.CONTACTS, EventKind.ENCRYPTED_DIRECT_MESSAGE, EventKind.DELETE])])
+        """
+        #self.filters= FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
+        if since > 0:
+            self.filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()],kinds=[EventKind.TEXT_NOTE], since=since,limit=limit_num)])
+        else:
+            self.filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
+        """
+        self.filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
+        if since>0:
+            self.filters = FiltersList.append([Filters(since=since)])
+        """        
+        if DEBUG:
+            print("[class DEBUG] set_filters",str(self.filters))
+
+
+    #def subscription(self, limit_num = 10):
+    #    self.set_subscription_id()
+    #    self.filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], limit=limit_num)])
+    #    self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
  
+
+    def single_relay_event(self):        
+        io_loop = tornado.ioloop.IOLoop.current()
+        policy = RelayPolicy()
+
+        r = Relay(RELAY_URL, self.message_pool, io_loop, policy, timeout=5)
+        r.add_subscription(self.subscription_id, self.filters)
+
+        try:
+            io_loop.run_sync(r.connect)
+        except gen.Return:
+            pass
+        io_loop.stop()
+
+        """
+        index = 0
+        if DEBUG: print("[events]")    
+        while self.message_pool.has_events():
+            if DEBUG: print("has_events [index]", index)
+            event_msg = self.message_pool.get_event()
+            print(event_msg.event.content)
+            index += 1
+        """
+
 
     def simple_event(self, txt="Hello Nostr"):
         event = Event(txt)
@@ -163,17 +237,16 @@ class Client():
 
 
     def receive_event(self):
-        #filters = Filters([Filter(    authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
-        filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
+        self.filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
         # EventKind.SET_METADATA, EventKind.RECOMMEND_RELAY, EventKind.CONTACTS, EventKind.ENCRYPTED_DIRECT_MESSAGE, EventKind.DELETE])])
         self.subscription_id = "my-python-event"
         request = [ClientMessageType.REQUEST, self.subscription_id]
-        request.extend(filters.to_json_array())
+        request.extend(self.filters.to_json_array())
 
         # relay_manager = RelayManager()
         # relay_manager.add_relay("wss://nostr.mnethome.de")
         # relay_manager.add_subscription(subscription_id, filters)
-        self.relay_manager.add_subscription_on_all_relays(self.subscription_id, filters)
+        self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
         self.relay_manager.open_connections({"cert_reqs": ssl.CERT_NONE})  # NOTE: This disables ssl certificate verification
         sleep(1.25)  # allow the connections to open
 
@@ -222,7 +295,7 @@ class Client():
         self.recipient = get_public_key(recipient_str)
         if DEBUG:
             if self.recipient != "":
-                print(f"recipient is set to {self.recipient.bech32()}")
+                print(f"[class DEBUG] recipient is set to {self.recipient.bech32()}")
             else:
                 raise Exception("reciever not valid")
 
@@ -232,8 +305,7 @@ class Client():
         dm = EncryptedDirectMessage()
         dm.encrypt( self.sender_pk.hex(), cleartext_content=msg, recipient_pubkey=self.recipient.hex(), )
 
-        filters = FiltersList(
-            [
+        self.filters = FiltersList([
             Filters(authors=[self.recipient.hex()], kinds=[EventKind.ENCRYPTED_DIRECT_MESSAGE],since=get_timestamp(),limit=1, )
             ]
         ) # old-ok: limit=10
@@ -248,38 +320,81 @@ class Client():
         dm_event.sign(self.sender_pk.hex())
         
         r.publish(dm_event.to_message())
-        r.add_subscription(subscription_id, filters)
+        r.add_subscription(subscription_id, self.filters)
         
         # temp. modifik - ToDo better
-        if DEBUG: print("[io_loop]")
+        if DEBUG: print("[class DEBUG] io_loop")
         try:            
             io_loop.run_sync(r.connect)
             sleep(5)
             io_loop.stop()
         except gen.Return:
             pass
-        if DEBUG: print("[io_loop] stop")
+        if DEBUG: print("io_loop.stop")
         # io_loop.stop()
 
 
-    def list_events(self,limit_num = 10):
+    def list_events_old(self):
         self.set_subscription_id()
         message_pool = MessagePool(first_response_only=False)
         policy = RelayPolicy()
         io_loop = tornado.ioloop.IOLoop.current()
-        r  = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=2)
+        
+        r = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=5)
         #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
-        filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
-        r.add_subscription(self.subscription_id, filters)
+
+        #filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
+        #self.set_filters(limit_num)
+        
+        r.add_subscription(self.subscription_id, self.filters)
+        #self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
 
         try:
             io_loop.run_sync(r.connect)
+            #self.relay_manager.run_sync()
         except gen.Return:
             pass
         io_loop.stop()
         
         event_msgs = message_pool.get_all_events()
         print(f"{r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
+        #print(f"x returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
+
+
+        table = Table("date", "content")
+        for event_msg in event_msgs[::-1]:
+            table.add_row(str(event_msg.event.date_time()), event_msg.event.content)
+        console.print(table)
+
+
+    def list_events(self):
+        self.set_subscription_id()
+        message_pool = MessagePool(first_response_only=False)
+        policy = RelayPolicy()
+        io_loop = tornado.ioloop.IOLoop.current()
+        
+        ##r  = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=5)
+        #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
+
+        #filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
+        #self.set_filters(limit_num)
+        
+        ##r.add_subscription(self.subscription_id, self.filters)
+        self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
+
+        """
+        try:
+            ##io_loop.run_sync(r.connect)
+            self.relay_manager.run_sync() # Err. Operation timed out after None seconds
+        except gen.Return:
+            pass
+        ##io_loop.stop()
+        """
+        
+        event_msgs = message_pool.get_all_events()
+        ##print(f"{r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
+        print(f"x returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
+
 
         table = Table("date", "content")
         for event_msg in event_msgs[::-1]:
