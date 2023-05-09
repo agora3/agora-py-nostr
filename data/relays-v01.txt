@@ -1,4 +1,4 @@
-relays INFO - ver.0.1/2023-05-06
+relays INFO - ver.0.1/2023-05-09
 =======================================
 ---------------------------------------
 1) wss://relay.damus.io
@@ -271,14 +271,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 25) wss://nostr.cercatrova.me
 ---------------------------------------
-name          - nostr-rs-relay-cercatrova
-description   - Self-hosted nostr-rs-relay in Switzerland. (The connection runs via a reverse proxy) 16GB RAM, 4 Cores and 80GB of SSD.
-pubkey        - 9984188a6578eb513fddcf658f389dbd532e54b82b628ad36666f7aa8f731b79
-contact       - cerca@swiss-enigma.ch
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
-limitation    - None
 ---------------------------------------
 26) wss://nostr.coollamer.com
 ---------------------------------------
@@ -371,14 +363,6 @@ limitation    - None
 ---------------------------------------
 34) wss://nostr.fmt.wiz.biz
 ---------------------------------------
-name          - nostr.fmt.wiz.biz
-description   - wiz's nostr relay in fremont
-pubkey        - npub1uvl7vhclmezvdhqha6eclkksln40rjhgwgsggvew683jf93fr4pq3mq3sd
-contact       - noc@wiz.biz
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.18.0
-limitation    - None
 ---------------------------------------
 35) wss://nostr.gromeul.eu
 ---------------------------------------
@@ -711,14 +695,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 67) wss://nostr.swiss-enigma.ch
 ---------------------------------------
-name          - nostr-rs-relay-cercatrova
-description   - Self-hosted nostr-rs-relay in Switzerland. (The connection runs via a reverse proxy) 16GB RAM, 4 Cores and 80GB of SSD.
-pubkey        - 9984188a6578eb513fddcf658f389dbd532e54b82b628ad36666f7aa8f731b79
-contact       - cerca@swiss-enigma.ch
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
-limitation    - None
 ---------------------------------------
 68) wss://nostr.uselessshit.co
 ---------------------------------------
