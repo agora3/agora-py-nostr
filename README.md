@@ -2,6 +2,9 @@
 
 simple Python Nostr Client
 
+This is experimental software in early development
+
+
 ## Install
 
 ```
