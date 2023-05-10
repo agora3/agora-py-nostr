@@ -17,3 +17,18 @@ print("new pub.key:", pub)
 print("NOSTR_SEC =>",sec)
 print()
 print("(you can save the NOSTR_SEC key in the file: ./agama_nostr/nostr_key.py)\n")
+
+
+
+
+"""
+$ python3 nostr_key_gen.py
+
+---------------------------------------
+----- new_key_generate
+---------------------------------------
+new pub.key: npub1ag0ra0shs0sd24wqwqdceu2yzj3uj5xa53ge2vstz0nyf49ez68qqq2jgj
+NOSTR_SEC => 98b7b......................................................7a1f5
+
+(you can save the NOSTR_SEC key in the file: ./agama_nostr/nostr_key.py)
+"""
