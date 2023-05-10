@@ -5,18 +5,16 @@ from time import sleep
 from rich.console import Console
 from rich.table import Table
 import json, ssl, uuid
-# import codecs
 from pynostr.relay_manager import RelayManager
 from pynostr.filters import FiltersList, Filters
 from pynostr.key import PrivateKey, PublicKey
 from pynostr.relay import Relay
 from pynostr.event import Event, EventKind 
 from pynostr.base_relay import RelayPolicy
-from pynostr.message_pool import MessagePool
-from pynostr.message_type import ClientMessageType
-from pynostr.message_type import RelayMessageType
-from pynostr.metadata import Metadata
 from pynostr.relay_list import RelayList
+from pynostr.message_pool import MessagePool
+from pynostr.message_type import RelayMessageType, ClientMessageType
+from pynostr.metadata import Metadata
 from pynostr.utils import get_public_key, get_relay_list, get_timestamp
 from pynostr.encrypted_dm import EncryptedDirectMessage
 import tornado.ioloop
@@ -24,7 +22,7 @@ from tornado import gen
 from agama_nostr.relays import relays_list
 from agama_nostr.tools import get_relay_information
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 
 DEBUG = True
@@ -32,18 +30,6 @@ RELAY_URL = relays_list[0] # single main relay "wss://relay.damus.io"
 nip_11_struct_select = ["name","description","software"]
 
 console = Console()
-"""
-input_str = input("author (npub or nip05): ")
-recipient = ""
-author = get_public_key(input_str)
-
-"""
-
-"""
-@gen.coroutine
-def print_dm(message_json):
-    if DEBUG: print("[print_dm()]", message_json)
-"""
 
 
 class Client():
@@ -63,6 +49,7 @@ class Client():
             self.connect_to_relay()
         
         self.policy = RelayPolicy()
+        self.set_subscription_id()
         
 
     def print_keys_info(self):
@@ -94,8 +81,7 @@ class Client():
         self.relay_manager = RelayManager(timeout=6)
         self.message_pool = MessagePool(first_response_only=False)
         self.io_loop = tornado.ioloop.IOLoop.current()
-        self.set_subscription_id()
-        
+                
         for relay in relays_list:
             self.relay_manager.add_relay(relay)
             if DEBUG:
@@ -130,8 +116,11 @@ class Client():
         print(f"Found {len(relay_list.data)} relays and start searching for metadata...") # Found 236 relays and start searching for metadata...
 
 
-    def set_subscription_id(self):
-        self.subscription_id = uuid.uuid1().hex
+    def set_subscription_id(self,sub_str_hex=""):
+        if sub_str_hex == "":
+            self.subscription_id = uuid.uuid1().hex
+        else:
+            self.subscription_id = sub_str_hex
         if DEBUG: print("set_subscription_id",self.subscription_id)
 
 
@@ -251,9 +240,6 @@ class Client():
         request = [ClientMessageType.REQUEST, self.subscription_id]
         request.extend(self.filters.to_json_array())
 
-        # relay_manager = RelayManager()
-        # relay_manager.add_relay("wss://nostr.mnethome.de")
-        # relay_manager.add_subscription(subscription_id, filters)
         self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
         self.relay_manager.open_connections({"cert_reqs": ssl.CERT_NONE})  # NOTE: This disables ssl certificate verification
         sleep(1.25)  # allow the connections to open
@@ -299,7 +285,6 @@ class Client():
         #sender_pk = PrivateKey.from_hex(NOSTR_SEC)
         self.sender_pk = self.private_key
         #public_key = sender_pk.public_key 
-        #recipient_str = input("recipient (npub or nip05): ")
         self.recipient = get_public_key(recipient_str)
         if DEBUG:
             if self.recipient != "":
@@ -307,26 +292,18 @@ class Client():
             else:
                 raise Exception("reciever not valid")
 
-        #msg = input("message: ")
-        #relay_url = RELAY_URL # input("relay: ")
-
         dm = EncryptedDirectMessage()
         dm.encrypt( self.sender_pk.hex(), cleartext_content=msg, recipient_pubkey=self.recipient.hex(), )
 
-        self.filters = FiltersList([
-            Filters(authors=[self.recipient.hex()], kinds=[EventKind.ENCRYPTED_DIRECT_MESSAGE],since=get_timestamp(),limit=1, )
-            ]
-        ) # old-ok: limit=10
-
-        subscription_id = uuid.uuid1().hex
-        #message_pool = MessagePool(first_response_only=False)
+        ##self.set_subscription_id()
+        self.filters = FiltersList([Filters(authors=[self.recipient.hex()], kinds=[EventKind.ENCRYPTED_DIRECT_MESSAGE],since=get_timestamp(),limit=1,)])
 
         r = Relay(RELAY_URL, self.message_pool, self.io_loop, self.policy, timeout=5, close_on_eose=False, message_callback=self.print_dm, )
         dm_event = dm.to_event()
         dm_event.sign(self.sender_pk.hex())
         
         r.publish(dm_event.to_message())
-        r.add_subscription(subscription_id, self.filters)
+        r.add_subscription(self.subscription_id, self.filters)
         
         # temp. modifik - ToDo better
         if DEBUG: print("[class DEBUG] io_loop")
@@ -341,14 +318,9 @@ class Client():
 
 
     def list_events_old(self):
-        self.set_subscription_id()
-        #message_pool = MessagePool(first_response_only=False)
-       
+  
         r = Relay(RELAY_URL, self.message_pool, self.io_loop, self.policy, timeout=5)
         #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
-
-        #filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
-        #self.set_filters(limit_num)
         
         r.add_subscription(self.subscription_id, self.filters)
         #self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
@@ -371,10 +343,7 @@ class Client():
         console.print(table)
 
 
-    def list_events(self):
-        self.set_subscription_id()        
-        #self.io_loop = tornado.ioloop.IOLoop.current()
-        
+    def list_events(self):  
         ##r  = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=5)
         #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
 
@@ -397,12 +366,10 @@ class Client():
         ##print(f"{r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
         print(f"x returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
 
-
         table = Table("date", "content")
         for event_msg in event_msgs[::-1]:
             table.add_row(str(event_msg.event.date_time()), event_msg.event.content)
         console.print(table)
-
 
         """    
         index = 0
