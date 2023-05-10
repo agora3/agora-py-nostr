@@ -22,7 +22,7 @@ from tornado import gen
 from agama_nostr.relays import relays_list
 from agama_nostr.tools import get_relay_information
 
-__version__ = "0.2.3"
+__version__ = "0.2.5"
 
 
 DEBUG = True
@@ -48,8 +48,11 @@ class Client():
         if relays:    
             self.connect_to_relay()
         
+
+        self.message_pool = MessagePool(first_response_only=False)
         self.policy = RelayPolicy()
         self.set_subscription_id()
+        self.io_loop = tornado.ioloop.IOLoop.current()
         
 
     def print_keys_info(self):
@@ -76,12 +79,10 @@ class Client():
         print()
 
 
-    def connect_to_relay(self):
+    def connect_to_relay(self,timeout=5):
         if DEBUG:  print("[Relay manager] connect_to_relays")
-        self.relay_manager = RelayManager(timeout=6)
-        self.message_pool = MessagePool(first_response_only=False)
-        self.io_loop = tornado.ioloop.IOLoop.current()
-                
+        self.relay_manager = RelayManager(timeout=timeout)
+                        
         for relay in relays_list:
             self.relay_manager.add_relay(relay)
             if DEBUG:
@@ -179,6 +180,36 @@ class Client():
     #    self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
  
 
+    def publish_event(self, txt="Hello Nostr", relay=""):
+        # simple_event expand
+        event = Event(content=txt,)
+        event.sign(self.private_key.hex())
+            
+        if DEBUG: print("[class DEBUG] publish_event",txt,event)
+
+        if relay == "": # from users-list of relays
+            self.relay_manager.publish_event(event)
+            self.relay_manager.run_sync()
+            sleep(3) # allow the messages to send
+
+            while self.relay_manager.message_pool.has_ok_notices():
+                ok_msg = self.relay_manager.message_pool.get_ok_notice()
+                if DEBUG: print("[class DEBUG] message_pool.get_ok_notice: ",ok_msg)
+                sleep(1)
+
+        else: # single specific relay
+            if relay == "R": relay = RELAY_URL
+            r = Relay(relay, self.message_pool, self.io_loop, self.policy, timeout=5)
+            r.add_subscription(self.subscription_id, self.filters)
+       
+            r.publish(event.to_message())
+            try:
+                self.io_loop.run_sync(r.connect) # multi: asyncio.exceptions.TimeoutError: Operation timed out after None seconds
+            except gen.Return:
+                pass
+            self.io_loop.stop()
+
+
     def single_relay_event(self):        
         r = Relay(RELAY_URL, self.message_pool, self.io_loop, self.policy, timeout=5)
         r.add_subscription(self.subscription_id, self.filters)
@@ -199,19 +230,6 @@ class Client():
             index += 1
         """
 
-
-    def simple_event(self, txt="Hello Nostr"):
-        event = Event(txt)
-        event.sign(self.private_key.hex())
-        if DEBUG: print("publish", txt, event)
-        self.relay_manager.publish_event(event)
-        self.relay_manager.run_sync()
-        sleep(3) # allow the messages to send
-
-        while self.relay_manager.message_pool.has_ok_notices():
-            ok_msg = self.relay_manager.message_pool.get_ok_notice()
-            print("ok_msg",ok_msg)
-            sleep(1)
 
     # publish_note / thread
     def replay_event(self, original_note_id, original_note_author_pubkey, txt="Reply: Hello Nostr"):
@@ -281,40 +299,44 @@ class Client():
     """
 
 
-    def send_mess(self, recipient_str, msg):
-        #sender_pk = PrivateKey.from_hex(NOSTR_SEC)
-        self.sender_pk = self.private_key
-        #public_key = sender_pk.public_key 
-        self.recipient = get_public_key(recipient_str)
+    def send_direct_message(self, recipient_str, msg, relay=""):
+        if DEBUG: print("[class DEBUG] send_direct_message")
+        self.sender_pk = self.private_key #sender_pk = PrivateKey.from_hex(NOSTR_SEC)
+        self.recipient = get_public_key(recipient_str) #public_key = sender_pk.public_key 
         if DEBUG:
             if self.recipient != "":
                 print(f"[class DEBUG] recipient is set to {self.recipient.bech32()}")
             else:
                 raise Exception("reciever not valid")
 
-        dm = EncryptedDirectMessage()
-        dm.encrypt( self.sender_pk.hex(), cleartext_content=msg, recipient_pubkey=self.recipient.hex(), )
-
         ##self.set_subscription_id()
         self.filters = FiltersList([Filters(authors=[self.recipient.hex()], kinds=[EventKind.ENCRYPTED_DIRECT_MESSAGE],since=get_timestamp(),limit=1,)])
-
-        r = Relay(RELAY_URL, self.message_pool, self.io_loop, self.policy, timeout=5, close_on_eose=False, message_callback=self.print_dm, )
+        
+        dm = EncryptedDirectMessage()
+        dm.encrypt( self.sender_pk.hex(), cleartext_content=msg, recipient_pubkey=self.recipient.hex(), )
         dm_event = dm.to_event()
-        dm_event.sign(self.sender_pk.hex())
-        
-        r.publish(dm_event.to_message())
-        r.add_subscription(self.subscription_id, self.filters)
-        
-        # temp. modifik - ToDo better
-        if DEBUG: print("[class DEBUG] io_loop")
-        try:            
-            self.io_loop.run_sync(r.connect)
-            sleep(5)
-            self.io_loop.stop()
-        except gen.Return:
-            pass
-        if DEBUG: print("io_loop.stop")
-        # io_loop.stop()
+        dm_event.sign(self.sender_pk.hex())        
+
+        if relay == "":
+            if DEBUG: print("[class DEBUG] list of relays")
+        else:
+            if DEBUG: print("[class DEBUG] single relay", relay)
+            if relay == "R": relay = RELAY_URL
+            r = Relay(relay, self.message_pool, self.io_loop, self.policy, timeout=5, close_on_eose=False, message_callback=self.print_dm, )
+            
+            r.publish(dm_event.to_message())
+            r.add_subscription(self.subscription_id, self.filters)
+            
+            # temp. modifik - ToDo better
+            if DEBUG: print("[class DEBUG] io_loop")
+            try:            
+                self.io_loop.run_sync(r.connect)
+                sleep(5)
+                self.io_loop.stop()
+            except gen.Return:
+                pass
+            if DEBUG: print("io_loop.stop")
+            # io_loop.stop()
 
 
     def list_events_old(self):
