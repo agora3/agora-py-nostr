@@ -1,3 +1,13 @@
+# Environments
 venv/
+env/
+ENV/
+.env
+.venv
+
+# Byte-compiled
 __pycache__/
 
+# data
+local_settings.py
+agama_nostr/nostr_key.py
