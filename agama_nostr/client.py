@@ -341,19 +341,14 @@ class Client():
 
 
     def list_events_old(self):
-  
-        r = Relay(RELAY_URL, self.message_pool, self.io_loop, self.policy, timeout=5)
-        r.add_subscription(self.subscription_id, self.filters)
-        
-        try:
-            self.io_loop.run_sync(r.connect)
-            #self.relay_manager.run_sync()
-        except gen.Return:
-            pass
-        self.io_loop.stop()
-        
+        self.single_relay_init()
+        self.io_loop_run()
+        self.get_all_events_table()
+
+
+    def get_all_events_table(self):
         event_msgs = self.message_pool.get_all_events()
-        print(f"{r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
+        print(f"{self.r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
         
         table = Table("date", "content")
         for event_msg in event_msgs[::-1]:
