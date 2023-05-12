@@ -257,7 +257,10 @@ class Client():
             index += 1
         #self.last_event_msg = event_msg.event.content
         self.last_event_msg = event_msg.event
-        
+        try:
+            return event_msg.event.content
+        except:
+            return "?"
     
     def message_pool_notices(self):
         index = 0
