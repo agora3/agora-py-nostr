@@ -1,4 +1,4 @@
-relays INFO - ver.0.1/2023-05-09
+relays INFO - ver.0.1/2023-05-12
 =======================================
 ---------------------------------------
 1) wss://relay.damus.io
@@ -80,14 +80,14 @@ limitation    - None
 ---------------------------------------
 8) wss://knostr.neutrine.com
 ---------------------------------------
-name          - knostr
-description   - knostr relay
+name          - relay.nostrview.com
+description   - Nostrview relay
 pubkey        - 2e9397a8c9268585668b76479f88e359d0ee261f8e8ea07b3b3450546d1601c8
-contact       - None
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 28, 50]
-software      - https://github.com/lpicanco/knostr
-version       - 0.5
-limitation    - None
+contact       - 2e9397a8c9268585668b76479f88e359d0ee261f8e8ea07b3b3450546d1601c8
+supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40, 111]
+software      - git+https://github.com/Cameri/nostream.git
+version       - 1.22.2
+limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': True}
 ---------------------------------------
 9) wss://nostr.petrkr.net/strfry
 ---------------------------------------
@@ -249,14 +249,6 @@ limitation    - None
 ---------------------------------------
 23) wss://nostr.bongbong.com
 ---------------------------------------
-name          - nostr-rs-relay
-description   - The bongs relayer!!
-pubkey        - f0c15cc2faa092a8fc03165f6403ea3561c9fda4e592e3e8db8b8731cd3e942f
-contact       - steve@bongbong.com
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
-limitation    - {'payment_required': False}
 ---------------------------------------
 24) wss://nostr.bostonbtc.com
 ---------------------------------------
@@ -269,8 +261,16 @@ software      - git+https://github.com/UTXOnly/nostream_Boston.git
 version       - 1.22.6
 limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': True}
 ---------------------------------------
-25) wss://nostr.cercatrova.me
+25) wss://nostr.crypticthreadz.com
 ---------------------------------------
+name          - nostr.crypticthreadz.com
+description   - A nostr relay written in Typescript.
+pubkey        - npub1umdl398c0fv2l5edkq56y06dp89gearxclm46nhu34wrhvdpc2uqahyu6z
+contact       - ctthreadz@protonmail.com
+supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
+software      - git+https://github.com/Cameri/nostream.git
+version       - 1.22.6
+limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': True}
 ---------------------------------------
 26) wss://nostr.coollamer.com
 ---------------------------------------
@@ -612,14 +612,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 58) wss://nostr.bitcoin.sex
 ---------------------------------------
-name          - nostr-bitcoin-sex
-description   - A newly created nostr-rs-relay.
-pubkey        - wnpub1t6wpld070ctftqe4893k5vxk0rj5u0jwzg2070flw9gph07k9ngqxsq82f
-contact       - mailto:admin@bitcoin.sex
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 26]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.7.15
-limitation    - None
 ---------------------------------------
 59) wss://relay.nostrich.de
 ---------------------------------------
@@ -656,9 +648,25 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 62) wss://nostr.sectiontwo.org
 ---------------------------------------
+name          - Bankers Bad Dream
+description   - BBD private relay
+pubkey        - 94f1782e440430f2d209f2c46f61fd5b38b9fe8798cc2ff840e9b863607fb1be
+contact       - bankersbaddream@sectiontwo.org
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
+software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
+version       - 0.8.8
+limitation    - {'payment_required': False}
 ---------------------------------------
 63) wss://nostr.semisol.dev
 ---------------------------------------
+name          - nostr.semisol.dev
+description   - nostr.semisol.dev
+pubkey        - 52b4a076bcbbbdc3a1aefa3735816cf74993b1b8db202b01c883c58be7fad8bd
+contact       - nostr@semisol.dev
+supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
+software      - git+https://github.com/hoytech/strfry.git
+version       - v107-f192adb
+limitation    - None
 ---------------------------------------
 64) wss://nostr.shawnyeager.net
 ---------------------------------------
@@ -695,6 +703,14 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 67) wss://nostr.swiss-enigma.ch
 ---------------------------------------
+name          - nostr-rs-relay-cercatrova
+description   - Self-hosted nostr-rs-relay in Switzerland. (The connection runs via a reverse proxy) 16GB RAM, 4 Cores and 80GB of SSD.
+pubkey        - 9984188a6578eb513fddcf658f389dbd532e54b82b628ad36666f7aa8f731b79
+contact       - cerca@swiss-enigma.ch
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
+software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
+version       - 0.8.8
+limitation    - None
 ---------------------------------------
 68) wss://nostr.uselessshit.co
 ---------------------------------------
@@ -804,9 +820,9 @@ name          - Lexington Bitcoin Meetup
 description   - Relay for the Lexington Bitcoin Meetup
 pubkey        - 433788cd9b966c6f65e0fdb3d039580102c581b8457f2e09ee4ca2234a73ef09
 contact       - mailto:patrick@lexingtonbitcoin.org
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22]
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
 software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.7.16
+version       - 0.8.8
 limitation    - None
 ---------------------------------------
 79) wss://relay.ryzizub.com
@@ -853,7 +869,7 @@ pubkey        - dcdd29d5f71beaa1c362e6aa384dd073fdcca1155caccd29f82d43acf8be7598
 contact       - dcdd29d5f71beaa1c362e6aa384dd073fdcca1155caccd29f82d43acf8be7598
 supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
 software      - git+https://github.com/hoytech/strfry.git
-version       - v78-30b8c38
+version       - v121-3946d9b
 limitation    - None
 ---------------------------------------
 84) wss://nostramsterdam.vpx.moe
@@ -1010,7 +1026,7 @@ pubkey        - 4ac24d2ee822a34a9881eff526bf71f39704419837e4c14b34642d82e111ed39
 contact       - mailto:raul@piraces.dev
 supported_nips - [5, 9, 11, 12, 15, 16, 19, 20]
 software      - git+https://github.com/piraces/rsslay.git
-version       - 0.4.7
+version       - 0.4.9
 limitation    - None
 ---------------------------------------
 99) wss://sg.qemura.xyz
