@@ -1,7 +1,7 @@
 """
 https://github.com/agora3/agora-py-nostr
 """
-from time import sleep
+from time import sleep, monotonic
 from rich.console import Console
 from rich.table import Table
 import json, ssl, uuid
@@ -54,6 +54,11 @@ class Client():
         self.policy = RelayPolicy()
         self.set_subscription_id()
         self.io_loop = tornado.ioloop.IOLoop.current()
+        self.contacts = None
+        self.contacts_event = None
+        self.contacts_for_relay = {}
+        self.contact_timeout = 0
+        self.contacts_last = -1
         
 
     def print_keys_info(self):
@@ -127,51 +132,73 @@ class Client():
     def set_subscription_id(self,sub_str_hex=""):
         if sub_str_hex == "":
             self.subscription_id = uuid.uuid1().hex
+            #self.prof_sub = uuid.uuid4().hex
         else:
             self.subscription_id = sub_str_hex
         if DEBUG: print("set_subscription_id",self.subscription_id)
 
 
-    def set_filter_meta(self, nostr_user=""):
+    def parse_author(self,nostr_user=""):
         if nostr_user == "":
-            author = self.private_key.public_key.hex()            
+            author = self.private_key.public_key.hex()
         else:
             author = PublicKey.from_npub(nostr_user).hex()
+        return author
+
+
+    def set_filter_meta(self, nostr_user=""):
+        author = self.parse_author(nostr_user)
           
         self.filters = FiltersList([Filters(authors=[author],kinds=[EventKind.SET_METADATA])])
         if DEBUG:
             print("[class DEBUG] set_filters",str(self.filters))
             print("- nostr_user_hex",author)
-        
 
-    def set_filters(self, since=0,limit_num=10):
+
+    def set_filter_contact(self, nostr_user=""):
+        author = self.parse_author(nostr_user)
+
+        self.filters = FiltersList([Filters(kinds=[EventKind.CONTACTS],authors=[author])])
+        self.contact_timeout = monotonic() + 10
+        if DEBUG:
+            print("[class DEBUG] set_filters",str(self.filters))
+
+
+    def get_contacts(self):
+        if DEBUG: print("[class DEBUG] getting existing contacts")
+        while monotonic() < self.contact_timeout:
+            if self.relay_manager.message_pool.has_events():
+                event_msg = self.relay_manager.message_pool.get_event()
+                print("ev_msg",event_msg)
+                if event_msg.event.kind == EventKind.CONTACTS:
+                    if DEBUG: print("got %d contacts from %s", len(event_msg.event.tags), event_msg.url)
+                    self.contacts_for_relay[event_msg.url] = event_msg.event.tags
+                    if event_msg.event.created_at > self.contacts_last:
+                        self.contacts = event_msg.event.tags
+                        self.contacts_event = event_msg.event
+                        self.contacts_last = event_msg.event.created_at
+            if not self.relay_manager.message_pool.has_events(): # 'Client' object has no attribute 'contacts_event'
+                sleep(0.25)
+        if DEBUG: print("[class DEBUG] done getting existing contacts")
+        return self.contacts_event
+
+
+    def set_filters(self, since=0,nostr_user="",limit_num=10):
         """
-        NIP-01 filtering. Explicitly supports "#e" and "#p" tag filters via `event_refs`
-        and `pubkey_refs`. Arbitrary NIP-12 single-letter tag filters are also supported via
-        `add_arbitrary_tag`. If a particular single-letter tag gains prominence, explicit
-        support should be added. For example:
-        
-        # arbitrary tag
-        filter.add_arbitrary_tag('t', [hashtags])
-
-        # promoted to explicit support
-        Filters(hashtag_refs=[hashtags])
-        :param ids: List[str]
-        :param kinds: List[EventKind]
-        :param authors: List[str]
-        :param since: int
-        :param until: int
-        :param event_refs: List[str]
-        :param pubkey_refs: List[str]
-        :param limit: int
-
-        # EventKind.SET_METADATA, EventKind.RECOMMEND_RELAY, EventKind.CONTACTS, EventKind.ENCRYPTED_DIRECT_MESSAGE, EventKind.DELETE])])
+        EventKind.SET_METADATA, EventKind.RECOMMEND_RELAY, EventKind.CONTACTS, EventKind.ENCRYPTED_DIRECT_MESSAGE, EventKind.DELETE])])
         """
         #self.filters= FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
         if since > 0:
             self.filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()],kinds=[EventKind.TEXT_NOTE], since=since,limit=limit_num)])
         else:
             self.filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
+
+        if nostr_user =="":
+            print() # test        
+        else:
+            author = self.parse_author(nostr_user)
+            self.filters = FiltersList([Filters(authors=[author],kinds=[EventKind.TEXT_NOTE],limit=limit_num)])
+        
         """
         self.filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
         if since>0:
