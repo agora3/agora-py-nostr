@@ -22,7 +22,7 @@ from tornado import gen
 from agama_nostr.relays import relays_list
 from agama_nostr.tools import get_relay_information
 
-__version__ = "0.2.6"
+__version__ = "0.2.7"
 
 
 DEBUG = True
@@ -50,6 +50,7 @@ class Client():
         
 
         self.message_pool = MessagePool(first_response_only=False)
+        self.last_event_msg = None
         self.policy = RelayPolicy()
         self.set_subscription_id()
         self.io_loop = tornado.ioloop.IOLoop.current()
@@ -227,6 +228,8 @@ class Client():
             event_msg = self.message_pool.get_event()
             print(event_msg.event.content)
             index += 1
+        #self.last_event_msg = event_msg.event.content
+        self.last_event_msg = event_msg.event
         
     
     def message_pool_notices(self):
