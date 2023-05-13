@@ -6,7 +6,7 @@ from agama_nostr.tools import print_head
 from agama_nostr.nips import meta_struct
 
 
-DEBUG = False
+DEBUG = True
 nostr_client = Client(NOSTR_SEC)
 
 #print_head("my relays list")

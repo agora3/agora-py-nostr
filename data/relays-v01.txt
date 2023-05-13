@@ -1,4 +1,4 @@
-relays INFO - ver.0.1/2023-05-12
+relays INFO - ver.0.1/2023-05-13
 =======================================
 ---------------------------------------
 1) wss://relay.damus.io
@@ -91,14 +91,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 9) wss://nostr.petrkr.net/strfry
 ---------------------------------------
-name          - petrkr strfry
-description   - Teting C++ strfry implementation.
-pubkey        - unset
-contact       - nostr.petrkr.net
-supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
-software      - git+https://github.com/hoytech/strfry.git
-version       - v113-e4e79af
-limitation    - None
 ---------------------------------------
 10) wss://nos.lol
 ---------------------------------------
@@ -135,14 +127,6 @@ limitation    - None
 ---------------------------------------
 13) wss://eden.nostr.land
 ---------------------------------------
-name          - eden.nostr.land
-description   - Eden Nostr Land - Toronto 1-01
-pubkey        - 00000000827ffaa94bfea288c3dfce4422c794fbb96625b6b31e9049f729d700
-contact       - me@ricardocabral.io
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
-limitation    - {'max_message_length': 1048576, 'max_subscriptions': 10, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': True}
 ---------------------------------------
 14) wss://nostr-01.bolt.observer
 ---------------------------------------
@@ -249,6 +233,14 @@ limitation    - None
 ---------------------------------------
 23) wss://nostr.bongbong.com
 ---------------------------------------
+name          - nostr-rs-relay
+description   - The bongs relayer!!
+pubkey        - f0c15cc2faa092a8fc03165f6403ea3561c9fda4e592e3e8db8b8731cd3e942f
+contact       - steve@bongbong.com
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
+software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
+version       - 0.8.8
+limitation    - {'payment_required': False}
 ---------------------------------------
 24) wss://nostr.bostonbtc.com
 ---------------------------------------
@@ -286,14 +278,6 @@ limitation    - None
 ---------------------------------------
 27) wss://nostr.corebreach.com
 ---------------------------------------
-name          - nostr.corebreach.com
-description   - Darmok and Jalad at Tanagra
-pubkey        - 1a4a8f79cae0979ea385c58ab9f954fdaccd6f245e6fa4750a79eb7510ae754e
-contact       - None
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.2
-limitation    - None
 ---------------------------------------
 28) wss://nostr.delo.software
 ---------------------------------------
@@ -361,8 +345,16 @@ software      - https://github.com/RiverFinancial/nostrex
 version       - 0.0.1
 limitation    - None
 ---------------------------------------
-34) wss://nostr.fmt.wiz.biz
+34) wss://relay.shitforce.one
 ---------------------------------------
+name          - shitforce one
+description   - shitposting relay, hosted by https://poa.st
+pubkey        - 
+contact       - support@shitforce.one
+supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
+software      - git+https://github.com/hoytech/strfry.git
+version       - v92-84ba68b
+limitation    - None
 ---------------------------------------
 35) wss://nostr.gromeul.eu
 ---------------------------------------
@@ -659,14 +651,6 @@ limitation    - {'payment_required': False}
 ---------------------------------------
 63) wss://nostr.semisol.dev
 ---------------------------------------
-name          - nostr.semisol.dev
-description   - nostr.semisol.dev
-pubkey        - 52b4a076bcbbbdc3a1aefa3735816cf74993b1b8db202b01c883c58be7fad8bd
-contact       - nostr@semisol.dev
-supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
-software      - git+https://github.com/hoytech/strfry.git
-version       - v107-f192adb
-limitation    - None
 ---------------------------------------
 64) wss://nostr.shawnyeager.net
 ---------------------------------------
@@ -778,8 +762,16 @@ software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
 version       - 0.8.7
 limitation    - None
 ---------------------------------------
-74) wss://nostr.zaprite.io
+74) wss://nostr1.current.fyi
 ---------------------------------------
+name          - relay.current.fyi
+description   - Default relay used by clients such as Damus, Current, Iris.to.
+pubkey        - npub1current7ntwqmh2twlrtl2llequeks0zfh36v69x4d3wmckg427safsh3w
+contact       - hello@getcurrent.io
+supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
+software      - git+https://github.com/hoytech/strfry.git
+version       - v103-e5ec135
+limitation    - None
 ---------------------------------------
 75) wss://nostr.zebedee.cloud
 ---------------------------------------
@@ -825,8 +817,16 @@ software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
 version       - 0.8.8
 limitation    - None
 ---------------------------------------
-79) wss://relay.ryzizub.com
+79) wss://universe.nostrich.land
 ---------------------------------------
+name          - universe.nostrich.land
+description   - A aggregator for relay.nostrich.land users.
+pubkey        - 649eefe468ddb107c05eba6d0511d2a5298540fe4d5f0072b00636008fc72f92
+contact       - william@nostrich.land
+supported_nips - [1, 9, 11, 12, 15, 16, 20, 22, 42, 50]
+software      - git+https://github.com/hoytech/strfry.git
+version       - v78-30b8c38
+limitation    - {'max_message_length': 131072, 'max_subscriptions': 20, 'max_filters': 10, 'max_limit': 500, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2000, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': True}
 ---------------------------------------
 80) wss://relay.n057r.club
 ---------------------------------------
@@ -1004,8 +1004,16 @@ software      - https://code.pobblelabs.org/fossil/nostr_relay
 version       - 1.12.2
 limitation    - None
 ---------------------------------------
-96) wss://relay.ryzizub.com
+96) wss://relay.wellorder.net
 ---------------------------------------
+name          - Public Wellorder Relay
+description   - Public relay for nostr development and use.
+pubkey        - 35d26e4690cbe1a898af61cc3515661eb5fa763b57bd0b42e45099c8b32fd50f
+contact       - mailto:relay@wellorder.net
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
+software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
+version       - 0.8.9
+limitation    - {'payment_required': False}
 ---------------------------------------
 97) wss://nostr-01.dorafactory.org
 ---------------------------------------

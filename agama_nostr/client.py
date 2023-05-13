@@ -1,6 +1,11 @@
+#!/usr/bin/env python
+
 """
+
 https://github.com/agora3/agora-py-nostr
+
 """
+
 from time import sleep, monotonic
 from rich.console import Console
 from rich.table import Table
@@ -22,11 +27,11 @@ from tornado import gen
 from agama_nostr.relays import relays_list
 from agama_nostr.tools import get_relay_information
 
-__version__ = "0.2.7"
+__version__ = "0.2.8" # 2023/05/12
 
 
 DEBUG = True
-RELAY_URL = relays_list[0] # single main relay "wss://relay.damus.io"
+RELAY_URL = "wss://relay.damus.io" # relays_list[0] # single main relay "wss://relay.damus.io"
 nip_11_struct_select = ["name","description","software"]
 
 console = Console()
@@ -256,8 +261,8 @@ class Client():
             print(event_msg.event.content)
             index += 1
         #self.last_event_msg = event_msg.event.content
-        self.last_event_msg = event_msg.event
         try:
+            self.last_event_msg = event_msg.event
             return event_msg.event.content
         except:
             return "?"
@@ -353,24 +358,25 @@ class Client():
 
         if relay == "":
             if DEBUG: print("[class DEBUG] list of relays")
+            #self.relay_manager.publish_event(dm_event.to_message())
+            self.relay_manager.publish_event(dm_event)
+            self.relay_manager.run_sync()
+            sleep(3) # allow the messages to send
+
+            while self.relay_manager.message_pool.has_ok_notices():
+                ok_msg = self.relay_manager.message_pool.get_ok_notice()
+                if DEBUG: print("[class DEBUG] message_pool.get_ok_notice: ",ok_msg)
+                sleep(1)
         else:
-            if DEBUG: print("[class DEBUG] single relay", relay)
+            if DEBUG: print("[class DEBUG] single relay", relay) # only for testing
             if relay == "R": relay = RELAY_URL
-            r = Relay(relay, self.message_pool, self.io_loop, self.policy, timeout=5, close_on_eose=False, message_callback=self.print_dm, )
+            self.r = Relay(relay, self.message_pool, self.io_loop, self.policy, timeout=5, close_on_eose=False, message_callback=self.print_dm, )
             
-            r.publish(dm_event.to_message())
-            r.add_subscription(self.subscription_id, self.filters)
+            self.r.publish(dm_event.to_message())
+            self.r.add_subscription(self.subscription_id, self.filters)
             
             # temp. modifik - ToDo better
-            if DEBUG: print("[class DEBUG] io_loop")
-            try:            
-                self.io_loop.run_sync(r.connect)
-                sleep(5)
-                self.io_loop.stop()
-            except gen.Return:
-                pass
-            if DEBUG: print("io_loop.stop")
-            # io_loop.stop()
+            self.io_loop_run()
 
 
     def list_events_old(self):
@@ -419,8 +425,12 @@ class Client():
 
 
     def io_loop_run(self):
-        try:
+        if DEBUG: print("[class DEBUG] io_loop")
+        try:            
             self.io_loop.run_sync(self.r.connect)
+            #sleep(2)
+            #self.io_loop.stop()
         except gen.Return:
             pass
+        if DEBUG: print("io_loop.stop")
         self.io_loop.stop()

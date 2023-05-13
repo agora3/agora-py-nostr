@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 basic tools for agama_nost client
 

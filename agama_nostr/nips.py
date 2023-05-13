@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 nips
 https://github.com/nostr-protocol/nips

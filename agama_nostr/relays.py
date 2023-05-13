@@ -3,29 +3,14 @@ my fav relays list
 2023/03-05
 """
 
-"""
-NIP-11
- "name": <string identifying relay>,
- "description": <string with detailed information>,
- "pubkey": <administrative contact pubkey>,
- "contact": <administrative alternate contact>,
- "supported_nips": <a list of NIP numbers supported by the relay>,
- "software": <string identifying relay software URL>,
- "version": <string version identifier>
-"""
-nip_11_struct = [ "name","description","pubkey","contact","supported_nips","software","version"]
-nip_11_struct_adv = [ "name","description","pubkey","contact","supported_nips","software","version","limitation"]
-
-
-
 relays_list = [
+"wss://relay.nostr.ro",
 "wss://relay.damus.io",
 "wss://relay.plebstr.com",
 "wss://nos.lol",
 #"wss://nostr.mnethome.de",
-#"wss://relay.snort.social/",
-"wss://relay.nostr.ro",
-"wss://nostr.petrkr.net/strfry",
+"wss://relay.snort.social/",
+#"wss://nostr.petrkr.net/strfry",
 #"wss://nostr.petrkr.net/nostream"
 ]
 
@@ -56,7 +41,8 @@ relays_list100 = [
 "wss://nostr.bitcoiner.social",
 "wss://nostr.bongbong.com",
 "wss://nostr.bostonbtc.com",
-"wss://nostr.cercatrova.me",
+#"wss://nostr.cercatrova.me",
+"wss://nostr.crypticthreadz.com",
 "wss://nostr.coollamer.com",
 "wss://nostr.corebreach.com",
 "wss://nostr.delo.software",
@@ -65,7 +51,8 @@ relays_list100 = [
 "wss://nostr.easydns.ca",
 "wss://nostr.einundzwanzig.space",
 "wss://nostrex.fly.dev",
-"wss://nostr.fmt.wiz.biz",
+#"wss://nostr.fmt.wiz.biz",
+"wss://relay.shitforce.one",
 "wss://nostr.gromeul.eu",
 "wss://nostr.hackerman.pro",
 "wss://nostr.handyjunky.com",
@@ -105,12 +92,14 @@ relays_list100 = [
 "wss://nostr.vulpem.com",
 "wss://nostr.w3ird.tech",
 "wss://nostr.walletofsatoshi.com",
-"wss://nostr.zaprite.io",
+#"wss://nostr.zaprite.io",
+"wss://nostr1.current.fyi",
 "wss://nostr.zebedee.cloud",
 "wss://relay.current.fyi",
 "wss://relay.cryptocculture.com",
 "wss://relay.lexingtonbitcoin.org",
-"wss://relay.ryzizub.com",
+#"wss://relay.ryzizub.com",
+"wss://universe.nostrich.land",
 "wss://relay.n057r.club",
 "wss://relay.nostr.au",
 "wss://relay.nostr.band",
@@ -127,7 +116,8 @@ relays_list100 = [
 "wss://relay.snort.social",
 "wss://relay.taxi",
 "wss://relay-pub.deschooling.us",
-"wss://relay.ryzizub.com",
+#"wss://relay.ryzizub.com",
+"wss://relay.wellorder.net",
 "wss://nostr-01.dorafactory.org",
 "wss://rsslay.nostr.moe",
 "wss://sg.qemura.xyz",
