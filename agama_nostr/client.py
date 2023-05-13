@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 
 """
-
 https://github.com/agora3/agora-py-nostr
+# filters: EventKind.TEXT_NOTE / SET_METADATA / RECOMMEND_RELAY / CONTACTS / ENCRYPTED_DIRECT_MESSAGE / DELETE
+# self.relay_manager.publish_event / publish_message
+
+usage:
+
+nc = Client(NOSTR_SEC) # nostr_client
 
 """
 
@@ -152,21 +157,16 @@ class Client():
 
 
     def set_filter_meta(self, nostr_user=""):
-        author = self.parse_author(nostr_user)
-          
+        author = self.parse_author(nostr_user)          
         self.filters = FiltersList([Filters(authors=[author],kinds=[EventKind.SET_METADATA])])
-        if DEBUG:
-            print("[class DEBUG] set_filters",str(self.filters))
-            print("- nostr_user_hex",author)
+        if DEBUG: print("[class DEBUG] set_filters",str(self.filters))
 
 
     def set_filter_contact(self, nostr_user=""):
         author = self.parse_author(nostr_user)
-
-        self.filters = FiltersList([Filters(kinds=[EventKind.CONTACTS],authors=[author])])
+        self.filters = FiltersList([Filters(authors=[author],kinds=[EventKind.CONTACTS])])
         self.contact_timeout = monotonic() + 10
-        if DEBUG:
-            print("[class DEBUG] set_filters",str(self.filters))
+        if DEBUG: print("[class DEBUG] set_filters",str(self.filters))
 
 
     def get_contacts(self):
@@ -189,10 +189,6 @@ class Client():
 
 
     def set_filters(self, since=0,nostr_user="",limit_num=10):
-        """
-        EventKind.SET_METADATA, EventKind.RECOMMEND_RELAY, EventKind.CONTACTS, EventKind.ENCRYPTED_DIRECT_MESSAGE, EventKind.DELETE])])
-        """
-        #self.filters= FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
         if since > 0:
             self.filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()],kinds=[EventKind.TEXT_NOTE], since=since,limit=limit_num)])
         else:
@@ -209,8 +205,7 @@ class Client():
         if since>0:
             self.filters = FiltersList.append([Filters(since=since)])
         """        
-        if DEBUG:
-            print("[class DEBUG] set_filters",str(self.filters))
+        if DEBUG: print("[class DEBUG] set_filters",str(self.filters))
 
 
     def publish_event(self, txt="Hello Nostr", relay=""):
@@ -266,7 +261,8 @@ class Client():
             return event_msg.event.content
         except:
             return "?"
-    
+
+
     def message_pool_notices(self):
         index = 0
         if DEBUG:
@@ -280,7 +276,7 @@ class Client():
         
 
     # publish_note / thread
-    def replay_event(self, original_note_id, original_note_author_pubkey, txt="Reply: Hello Nostr"):
+    def replay_event(self, original_note_id, original_note_author_pubkey, txt="Reply"):
         reply = Event(content=txt,)
         # create 'e' tag reference to the note you're replying to
         reply.add_event_ref(original_note_id)
@@ -301,8 +297,6 @@ class Client():
 
     def receive_event(self):
         ##self.filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
-        # EventKind.SET_METADATA, EventKind.RECOMMEND_RELAY, EventKind.CONTACTS, EventKind.ENCRYPTED_DIRECT_MESSAGE, EventKind.DELETE])])
-        ##self.subscription_id = "my-python-event"
         request = [ClientMessageType.REQUEST, self.subscription_id]
         request.extend(self.filters.to_json_array())
 
@@ -348,13 +342,12 @@ class Client():
             else:
                 raise Exception("reciever not valid")
 
-        ##self.set_subscription_id()
         self.filters = FiltersList([Filters(authors=[self.recipient.hex()], kinds=[EventKind.ENCRYPTED_DIRECT_MESSAGE],since=get_timestamp(),limit=1,)])
         
         dm = EncryptedDirectMessage()
         dm.encrypt( self.sender_pk.hex(), cleartext_content=msg, recipient_pubkey=self.recipient.hex(), )
         dm_event = dm.to_event()
-        dm_event.sign(self.sender_pk.hex())        
+        dm_event.sign(self.sender_pk.hex())   
 
         if relay == "":
             if DEBUG: print("[class DEBUG] list of relays")
@@ -385,6 +378,16 @@ class Client():
         self.get_all_events_table()
 
 
+    def get_all_events_data(self):
+        event_msgs = self.message_pool.get_all_events()
+        if DEBUG: print(f"{self.r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
+
+        evs = []
+        for event_msg in event_msgs[::-1]:
+            evs.append(str(event_msg.event.date_time()) + "\n" + str(event_msg.event.content))
+        return evs
+        
+
     def get_all_events_table(self):
         event_msgs = self.message_pool.get_all_events()
         print(f"{self.r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
@@ -393,26 +396,15 @@ class Client():
         for event_msg in event_msgs[::-1]:
             table.add_row(str(event_msg.event.date_time()), event_msg.event.content)
         console.print(table)
+        return event_msgs
 
 
     def list_events(self):  
-        ##r  = Relay(RELAY_URL, message_pool, io_loop, policy, timeout=5)
         #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
-
         #filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
         #self.set_filters(limit_num)
-        
-        ##r.add_subscription(self.subscription_id, self.filters)
         self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
-
-        """
-        try:
-            ##io_loop.run_sync(r.connect)
-            self.relay_manager.run_sync() # Err. Operation timed out after None seconds
-        except gen.Return:
-            pass
-        ##io_loop.stop()
-        """
+        #io_loop_run()
         
         event_msgs = self.message_pool.get_all_events()
         ##print(f"{r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
