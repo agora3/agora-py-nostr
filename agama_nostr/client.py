@@ -6,6 +6,8 @@ https://github.com/agora3/agora-py-nostr
 # self.relay_manager.publish_event / publish_message
 
 usage:
+from agama_nostr.client import Client 
+from agama_nostr.nostr_key import NOSTR_SEC
 
 nc = Client(NOSTR_SEC) # nostr_client
 
@@ -32,7 +34,7 @@ from tornado import gen
 from agama_nostr.relays import relays_list
 from agama_nostr.tools import get_relay_information
 
-__version__ = "0.2.8" # 2023/05/12
+__version__ = "0.2.9" # 2023/05/14
 
 
 DEBUG = True
@@ -64,6 +66,7 @@ class Client():
         self.policy = RelayPolicy()
         self.set_subscription_id()
         self.io_loop = tornado.ioloop.IOLoop.current()
+        #tornado.ioloop.IOLoop.clear_current
         self.contacts = None
         self.contacts_event = None
         self.contacts_for_relay = {}
@@ -238,11 +241,7 @@ class Client():
     def single_relay_event(self):
         self.single_relay_init()      
         # x-self.r.publish(event.to_message())
-        try:
-            self.io_loop.run_sync(self.r.connect) # multi: asyncio.exceptions.TimeoutError: Operation timed out after None seconds
-        except gen.Return:
-            pass
-        self.io_loop.stop()
+        self.io_loop_run()
 
 
     def message_pool_events(self):
@@ -296,18 +295,24 @@ class Client():
 
 
     def receive_event(self):
+        if DEBUG: print("[class DEBUG] receive_event()")
         ##self.filters = FiltersList([Filters(authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
         request = [ClientMessageType.REQUEST, self.subscription_id]
         request.extend(self.filters.to_json_array())
+        print(request)
 
+        if DEBUG: print("[class DEBUG] add_subscription_on_all_relays") 
         self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
+        if DEBUG: print("[class DEBUG] open_connections") 
         self.relay_manager.open_connections({"cert_reqs": ssl.CERT_NONE})  # NOTE: This disables ssl certificate verification
-        sleep(1.25)  # allow the connections to open
+        sleep(2)  # allow the connections to open
 
         message = json.dumps(request)
+        if DEBUG: print("[class DEBUG] publish_message: ",message)
         self.relay_manager.publish_message(message)
         sleep(1.5)  # allow the messages to send
 
+        if DEBUG: print("[class DEBUG] relay_manager.message_pool:")
         while self.relay_manager.message_pool.has_events():
             event_msg = self.relay_manager.message_pool.get_event()
             print(event_msg.event.content)
@@ -333,7 +338,7 @@ class Client():
 
 
     def send_direct_message(self, recipient_str, msg, relay=""):
-        if DEBUG: print("[class DEBUG] send_direct_message")
+        if DEBUG: print("[class DEBUG] send_direct_message()")
         self.sender_pk = self.private_key #sender_pk = PrivateKey.from_hex(NOSTR_SEC)
         self.recipient = get_public_key(recipient_str) #public_key = sender_pk.public_key 
         if DEBUG:
@@ -399,12 +404,9 @@ class Client():
         return event_msgs
 
 
-    def list_events(self):  
-        #r = Relay(relay_url, message_pool, io_loop, policy, timeout=5, close_on_eose=False, message_callback=print_dm, )
-        #filters = FiltersList([Filters(kinds=[EventKind.TEXT_NOTE], limit=limit_num)])
-        #self.set_filters(limit_num)
+    def list_events(self):
+        if DEBUG: print("[class DEBUG] list_events()")  
         self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
-        #io_loop_run()
         
         event_msgs = self.message_pool.get_all_events()
         ##print(f"{r.url} returned {len(event_msgs)} TEXT_NOTEs from {self.public_key}.")
@@ -419,10 +421,12 @@ class Client():
     def io_loop_run(self):
         if DEBUG: print("[class DEBUG] io_loop")
         try:            
-            self.io_loop.run_sync(self.r.connect)
+            self.io_loop.run_sync(self.r.connect) # Err. Operation timed out after None seconds
             #sleep(2)
             #self.io_loop.stop()
         except gen.Return:
             pass
-        if DEBUG: print("io_loop.stop")
         self.io_loop.stop()
+        self.io_loop.clear_current()
+        self.r.close()
+        if DEBUG: print("[class DEBUG] io_loop - stop / clear")
