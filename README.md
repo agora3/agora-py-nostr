@@ -10,19 +10,18 @@ This is experimental software in early development
 ```
 git clone https://github.com/agora3/agora-py-nostr.git
 cd agora-py-nostr
-// sh:
-chmod +x initial_setup.sh
-./initial_setup.sh
-
-// or:
+//
 python3 -m venv venv  
 source venv/bin/activate
 pip install -r requirements.txt
 // pip install pynostr 
-
-export PYTHONPATH="$PYTHONPATH:./"
 cp agama_nostr/nostr_key.py.tmp agama_nostr/nostr_key.py
+export PYTHONPATH="$PYTHONPATH:./"
 python nostr_key_gen.py 
+
+// or sh:
+chmod +x initial_setup.sh
+./initial_setup.sh
 ```
 
 
