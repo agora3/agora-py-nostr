@@ -25,7 +25,7 @@ chmod +x initial_setup.sh
 ```
 
 
-Basic usage (example)
+## First start
 
 ```
 setup your secret key in the file ./agama_nostr/nostr_key.py
@@ -43,18 +43,21 @@ new pub.key: npub1ag0ra0shs0sd24wqwqdceu2yzj3uj5xa53ge2vstz0nyf49ez68qqq2jgj
 NOSTR_SEC => 98b7b......................................................7a1f5
 
 (you can save the NOSTR_SEC key in the file: ./agama_nostr/nostr_key.py)
+``` 
  
+## Basic usage (publish vevent)
 
-
-
-your project:
-
+```python
+from time import sleep
 from agama_nostr.client import Client 
 from agama_nostr.nostr_key import NOSTR_SEC
 
-nostr_client = Client(NOSTR_SEC)
-# nostr_client.subscription(limit_num=20) 
+nc = Client(NOSTR_SEC) # nostr_client
+nc.publish_event(txt="Hello Nostr! \nThis event is sent from the very simple python client Agama_nostr.\nPura vida.")
+sleep(1)
 
+nc.set_filters(limit_num = 20)
+nc.list_events_old()
 ...
 ```
 
