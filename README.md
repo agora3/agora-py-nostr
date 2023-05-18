@@ -80,7 +80,7 @@ from agama_nostr.nostr_key import NOSTR_SEC, NOSTR_PUB_RELAY
 from agama_nostr.nips import meta_struct
 
 nc = Client(NOSTR_SEC, False) # nostr_client
-nc.set_filter_meta(NOSTR_PUB_RELAY)
+nc.set_filter_meta(NOSTR_PUB_RELAY) # npub1relay9mayry...
 nc.single_relay_event()
 nc.message_pool_events()
 
