@@ -1,9 +1,16 @@
+import os, sys
 from time import sleep
+from dotenv import load_dotenv
+
 from agama_nostr.client import Client 
-from agama_nostr.nostr_key import NOSTR_SEC
 
+load_dotenv()  # take environment variables from .env.
 
-nostr_client = Client(NOSTR_SEC, False)
+if not os.environ.get('NOSTR_KEY'):
+    print("You need to set NOSTR_KEY in .env file")
+    sys.exit(1)
+
+nostr_client = Client(os.environ['NOSTR_KEY'], False)
 nostr_client.connect_to_relay()
 nostr_client.publish_event(txt="Hello Nostr! \nHave a nice day.\n")
 sleep(1)
