@@ -10,14 +10,9 @@ This is experimental software in early development
 ```
 git clone https://github.com/agora3/agora-py-nostr.git
 cd agora-py-nostr
-//
 python3 -m venv venv  
 source venv/bin/activate
 pip install -r requirements.txt
-// pip install pynostr 
-cp agama_nostr/nostr_key.py.tmp agama_nostr/nostr_key.py
-export PYTHONPATH="$PYTHONPATH:./"
-python nostr_key_gen.py 
 
 // or sh:
 chmod +x initial_setup.sh
@@ -28,11 +23,11 @@ chmod +x initial_setup.sh
 ## First start
 
 ```
-setup your secret key in the file ./agama_nostr/nostr_key.py
+put your existing NOSTR_KEY in the .env file 
 
-NOSTR_SEC = "------ YOUR SECRET KEY -------"
+NOSTR_KEY=yourSecret123Key
 
-or create new one:
+or generate a new one
 
 $ python3 nostr_key_gen.py
 
@@ -42,7 +37,7 @@ $ python3 nostr_key_gen.py
 new pub.key: npub1ag0ra0shs0sd24wqwqdceu2yzj3uj5xa53ge2vstz0nyf49ez68qqq2jgj
 NOSTR_SEC => 98b7b......................................................7a1f5
 
-(you can save the NOSTR_SEC key in the file: ./agama_nostr/nostr_key.py)
+(you can save the NOSTR_SEC key in the file .env)
 ``` 
  
 ## Publish vevent
