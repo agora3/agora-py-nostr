@@ -13,12 +13,7 @@ cd agora-py-nostr
 python3 -m venv venv  
 source venv/bin/activate
 pip install -r requirements.txt
-
-// or sh:
-chmod +x initial_setup.sh
-./initial_setup.sh
 ```
-
 
 ## First start
 
