@@ -17,13 +17,13 @@ pip install -r requirements.txt
 
 ## First start
 
-```
 put your existing NOSTR_KEY in the .env file 
-
-NOSTR_KEY=yourSecret123Key
+```
+NOSTR_KEY=your---long---secret---Key
+```
 
 or generate a new one
-
+```
 $ python3 nostr_key_gen.py
 
 ---------------------------------------
