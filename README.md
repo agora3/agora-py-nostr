@@ -13,7 +13,7 @@ cd agora-py-nostr
 python3 -m venv venv  
 source venv/bin/activate
 pip install -r requirements.txt
-touch. env
+touch .env
 ```
 
 ## First start
