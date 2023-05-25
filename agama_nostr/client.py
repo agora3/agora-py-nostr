@@ -14,6 +14,7 @@ nc = Client(NOSTR_SEC) # nostr_client
 """
 
 from time import sleep, monotonic
+from datetime import date, datetime, timedelta
 from rich.console import Console
 from rich.table import Table
 import json, ssl, uuid
@@ -32,16 +33,18 @@ from pynostr.encrypted_dm import EncryptedDirectMessage
 import tornado.ioloop
 from tornado import gen
 from agama_nostr.relays import relays_list
-from agama_nostr.tools import get_relay_information
+from agama_nostr.tools import get_relay_information, timestamp_from_now
+from agama_nostr.logger import logger_init
 
-__version__ = "0.2.9" # 2023/05/14
 
+__version__ = "0.3.0" # 2023/05/15
 
 DEBUG = True
 RELAY_URL = "wss://relay.damus.io" # relays_list[0] # single main relay "wss://relay.damus.io"
 nip_11_struct_select = ["name","description","software"]
 
 console = Console()
+log = logger_init()
 
 
 class Client():
@@ -53,10 +56,13 @@ class Client():
             print("Err. private_key")
             self.private_key = None
             self.public_key = None
-        if DEBUG:
-            print("[Client init]")
-            self.print_keys_info()
+        
 
+        log_msg = "[nc] Client init | ver: " + __version__
+        log.debug(log_msg)
+        #log.warning(log_msg)
+
+            
         if relays:    
             self.connect_to_relay()
         
@@ -72,6 +78,8 @@ class Client():
         self.contacts_for_relay = {}
         self.contact_timeout = 0
         self.contacts_last = -1
+        #today = datetime.now()
+        #since = today.timestamp()
         
 
     def print_keys_info(self):
@@ -99,7 +107,7 @@ class Client():
 
 
     def connect_to_relay(self,timeout=5):
-        if DEBUG:  print("[Relay manager] connect_to_relays")
+        log.debug("[Relay manager] connect_to_relay")
         self.relay_manager = RelayManager(timeout=timeout)
                         
         for relay in relays_list:
@@ -116,18 +124,28 @@ class Client():
                 except:
                     print("Err. parse relay_data")
 
+
+    def reconnect_all_relay(self):
+        if DEBUG:  print("[Relay manager] reconnect_all_relay")
+        self.relay_manager.close_all_relay_connections()
+        sleep(3)
+        self.relay_manager = self.connect_to_relay()
+        sleep(2)
+        print("reconnect_all_relay done")
+        #return relay_manager
+
+
+    def close_connections(self):
+        log.debug("[nc] relay_manager.close_connections")
+        self.relay_manager.close_connections()
+        #self.io_loop.remove_timeout
+        #self.io_loop.close()
+
  
     def single_relay_init(self, relay="R", timeout=5):
         if relay == "R": relay = RELAY_URL
         self.r = Relay(relay, self.message_pool, self.io_loop, self.policy, timeout=timeout)
         self.r.add_subscription(self.subscription_id, self.filters)
-
-
-    def close_connections(self):
-        if DEBUG: print("[class DEBUG] relay_manager.close_connections")
-        self.relay_manager.close_connections()
-        #self.io_loop.remove_timeout
-        #self.io_loop.close()
 
 
     def scann_relay_list(self):
@@ -148,7 +166,9 @@ class Client():
             #self.prof_sub = uuid.uuid4().hex
         else:
             self.subscription_id = sub_str_hex
-        if DEBUG: print("set_subscription_id",self.subscription_id)
+
+        log_msg = "[nc] set_subscription_id -> "+ str(self.subscription_id)
+        log.debug(log_msg)
 
 
     def parse_author(self,nostr_user=""):
@@ -162,7 +182,8 @@ class Client():
     def set_filter_meta(self, nostr_user=""):
         author = self.parse_author(nostr_user)          
         self.filters = FiltersList([Filters(authors=[author],kinds=[EventKind.SET_METADATA])])
-        if DEBUG: print("[class DEBUG] set_filters",str(self.filters))
+        log_msg = "[nc] set_filter_meta " + str(self.filters)
+        log.debug(log_msg)
 
 
     def set_filter_contact(self, nostr_user=""):
@@ -236,6 +257,28 @@ class Client():
             except gen.Return:
                 pass
             self.io_loop.stop()
+
+
+    def nostr_receive_event(self): # nostr_files
+        if DEBUG: print("[class DEBUG] nostr_receive_event")
+        tweek ,tmonth = timestamp_from_now() # one_week_from_now_timestamp, one_month_from_now_timestamp
+        self.filters = FiltersList([Filters(since=tweek,limit=5,authors=[self.private_key.public_key.hex()], kinds=[EventKind.TEXT_NOTE])])
+        request = [ClientMessageType.REQUEST, self.subscription_id]
+        request.extend(self.filters.to_json_array())
+
+        self.relay_manager.add_subscription_on_all_relays(self.subscription_id, self.filters)
+        self.relay_manager.open_connections({"cert_reqs": ssl.CERT_NONE})  # NOTE: This disables ssl certificate verification
+        sleep(2)  # allow the connections to open
+
+        message = json.dumps(request)
+        self.relay_manager.publish_message(message)
+        sleep(1.5)  # allow the messages to send
+
+        while self.relay_manager.message_pool.has_events():
+            event_msg = self.relay_manager.message_pool.get_event()
+            print(event_msg.event.content)
+
+        self.relay_manager.close_all_relay_connections()
 
 
     def single_relay_event(self):
@@ -375,6 +418,12 @@ class Client():
             
             # temp. modifik - ToDo better
             self.io_loop_run()
+    
+
+    def recieve_message(self, recipient_str, relay=""):    
+        if DEBUG: print("[class DEBUG] recieve_message - test")
+        self.recipient = get_public_key(recipient_str)
+        self.filters = FiltersList([Filters(authors=[self.recipient.hex()], kinds=[EventKind.ENCRYPTED_DIRECT_MESSAGE],since=get_timestamp(),limit=1,)])
 
 
     def list_events_old(self):
