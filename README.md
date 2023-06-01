@@ -14,6 +14,8 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 touch .env
+
+export PYTHONPATH="$PYTHONPATH:./"
 ```
 
 ## First start
