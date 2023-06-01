@@ -11,7 +11,7 @@ nc = Client(NOSTR_SEC) # nostr client
 #nc.subscription(limit_num=20)
 
 print_head("test: send event")
-nc.simple_event(txt="Hello Nostr! \nThis is a message sent from the very simple python client Agama_nostr.\nTest")
+nc.publish_event(txt="Hello Nostr! \nThis is a message sent from the very simple python client Agama_nostr.\nTest")
 
 sleep(1)
-nc.list_events(limit_num=10)
+nc.list_events()
