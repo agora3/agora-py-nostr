@@ -133,19 +133,11 @@ pubkey        - 00000000827ffaa94bfea288c3dfce4422c794fbb96625b6b31e9049f729d700
 contact       - me@ricardocabral.io
 supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
 software      - git+https://github.com/Cameri/nostream.git
-version       - 1.24.0
+version       - 1.25.2
 limitation    - {'max_message_length': 1048576, 'max_subscriptions': 10, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': True}
 ---------------------------------------
 14) wss://nostr-01.bolt.observer
 ---------------------------------------
-name          - nostream.your-domain.com
-description   - A nostr relay written in Typescript.
-pubkey        - replace-with-your-pubkey-in-hex
-contact       - operator@your-domain.com
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
-limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 15) wss://nostr-1.nbo.angani.co
 ---------------------------------------
@@ -219,14 +211,6 @@ limitation    - None
 ---------------------------------------
 21) wss://nostr.bch.ninja
 ---------------------------------------
-name          - nostream.your-domain.com
-description   - A nostr relay written in Typescript.
-pubkey        - replace-with-your-pubkey-in-hex
-contact       - operator@your-domain.com
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
-limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 22) wss://nostr.bitcoiner.social
 ---------------------------------------
@@ -364,7 +348,7 @@ pubkey        - 0abe593a4dca94960be3931fc015a41ed3b543f050dfed3b0c6d1e0af0f0c09c
 contact       - nostr@gromeul.eu
 supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
 software      - git+https://github.com/Cameri/nostream.git
-version       - 1.24.0
+version       - 1.25.2
 limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': True}
 ---------------------------------------
 36) wss://nostr.hackerman.pro
@@ -405,6 +389,14 @@ limitation    - None
 ---------------------------------------
 40) wss://nostrich.friendship.tw
 ---------------------------------------
+name          - Taiwan nostr-rs-relay
+description   - None
+pubkey        - None
+contact       - None
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
+software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
+version       - 0.8.9
+limitation    - {'payment_required': False}
 ---------------------------------------
 41) wss://nostr.kollider.xyz
 ---------------------------------------
@@ -474,15 +466,6 @@ limitation    - None
 ---------------------------------------
 47) wss://nostr.nodeofsven.com
 ---------------------------------------
-name          - Another day, another relay
-description   - 24V 2NC/2NO relay with a fancy LED!
-Switched to NIP-05 only publishing to combat spam
-pubkey        - 106ff79196c303be26452bd01c316b2873adeb7b94f6f7f22398819da36e1c3a
-contact       - mailto:admin@nodeofsven.com
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
-limitation    - {'payment_required': False}
 ---------------------------------------
 48) wss://nostr.ownscale.org
 ---------------------------------------
@@ -558,8 +541,8 @@ pubkey        - 3f770d65d3a764a9c5cb503ae123e62ec7598ad035d836e2a810f3877a745b24
 contact       - nostr@derekross.me
 supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
 software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
-limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
+version       - 1.25.2
+limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 55) wss://nostr.zebedee.cloud
 ---------------------------------------
@@ -607,6 +590,14 @@ limitation    - None
 ---------------------------------------
 59) wss://relay.nostrich.de
 ---------------------------------------
+name          - relay.nostrich.de
+description   - Fast and reliable relay for NIP-05 validated users
+pubkey        - 9839a36d51b5f190497f9b2d268ee08903eec7f5ed2e9ae3ceeb5db89aabba10
+contact       - None
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
+software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
+version       - 0.8.9
+limitation    - {'payment_required': False}
 ---------------------------------------
 60) wss://nostr.roundrockbitcoiners.com
 ---------------------------------------
@@ -632,14 +623,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 62) wss://nostr.sectiontwo.org
 ---------------------------------------
-name          - Bankers Bad Dream
-description   - BBD private relay
-pubkey        - 94f1782e440430f2d209f2c46f61fd5b38b9fe8798cc2ff840e9b863607fb1be
-contact       - bankersbaddream@sectiontwo.org
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.9
-limitation    - {'payment_required': False}
 ---------------------------------------
 63) wss://nostr.semisol.dev
 ---------------------------------------
@@ -652,7 +635,7 @@ pubkey        - c7eda660a6bc8270530e82b4a7712acdea2e31dc0a56f8dc955ac009efd97c86
 contact       - hello@shawnyeager.com
 supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
 software      - git+https://github.com/Cameri/nostream.git
-version       - 1.24.0
+version       - 1.25.2
 limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 65) wss://nostr.slothy.win
@@ -872,6 +855,14 @@ limitation    - None
 ---------------------------------------
 86) wss://relay.nostrich.de
 ---------------------------------------
+name          - relay.nostrich.de
+description   - Fast and reliable relay for NIP-05 validated users
+pubkey        - 9839a36d51b5f190497f9b2d268ee08903eec7f5ed2e9ae3ceeb5db89aabba10
+contact       - None
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
+software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
+version       - 0.8.9
+limitation    - {'payment_required': False}
 ---------------------------------------
 87) wss://relay.nostrid.com
 ---------------------------------------
@@ -892,7 +883,7 @@ pubkey        - 63013edab713f9e6598f642920d6fd7b571a170860ab29548ab70f413dab5e84
 contact       - relay@nostr.nu
 supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
 software      - git+https://github.com/Cameri/nostream.git
-version       - 1.24.1
+version       - 1.25.2
 limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': True}
 ---------------------------------------
 89) wss://relay.nostr.ro
@@ -952,14 +943,6 @@ limitation    - {'payment_required': False}
 ---------------------------------------
 94) wss://relay.taxi
 ---------------------------------------
-name          - nostream.your-domain.com
-description   - A nostr relay written in TypeScript.
-pubkey        - replace-with-your-pubkey
-contact       - operator@your-domain.com
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.16.0
-limitation    - None
 ---------------------------------------
 95) wss://relay-pub.deschooling.us
 ---------------------------------------
@@ -1002,11 +985,19 @@ pubkey        - 4ac24d2ee822a34a9881eff526bf71f39704419837e4c14b34642d82e111ed39
 contact       - mailto:raul@piraces.dev
 supported_nips - [5, 9, 11, 12, 15, 16, 19, 20]
 software      - git+https://github.com/piraces/rsslay.git
-version       - 0.5.0
+version       - 0.5.1
 limitation    - None
 ---------------------------------------
 99) wss://sg.qemura.xyz
 ---------------------------------------
+name          - global.relay.red
+description   - A nostr relay written in Typescript.
+pubkey        - c61ca1ee4f85a8d0733a07434fd460602da9345abf9a0592a0a5948f16dd3c5e
+contact       - sebastian@relay.red
+supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
+software      - git+https://github.com/Cameri/nostream.git
+version       - 1.22.6
+limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 100) wss://paid.no.str.cr
 ---------------------------------------
