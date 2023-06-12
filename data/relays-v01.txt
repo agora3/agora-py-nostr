@@ -1,4 +1,4 @@
-relays INFO - ver.0.1/2023-04
+relays INFO - ver.0.1/2023-06-12
 =======================================
 ---------------------------------------
 1) wss://relay.damus.io
@@ -211,6 +211,14 @@ limitation    - None
 ---------------------------------------
 21) wss://nostr.bch.ninja
 ---------------------------------------
+name          - nostream.your-domain.com
+description   - A nostr relay written in Typescript.
+pubkey        - replace-with-your-pubkey-in-hex
+contact       - operator@your-domain.com
+supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
+software      - git+https://github.com/Cameri/nostream.git
+version       - 1.22.6
+limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 22) wss://nostr.bitcoiner.social
 ---------------------------------------
@@ -502,14 +510,6 @@ limitation    - {'payment_required': False}
 ---------------------------------------
 51) wss://nostr-pub1.southflorida.ninja
 ---------------------------------------
-name          - nostr-pub1.southflorida.ninja
-description   - A public nostr relay hosted in South Florida.
-pubkey        - 5db776f3e7a9ca7cf22b2d469e7a44092f343bb3a25c2c5162a2931d4c696f17
-contact       - troy@southflorida.ninja
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
-limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 52) wss://nostr-pub.wellorder.net
 ---------------------------------------
@@ -546,14 +546,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 55) wss://nostr.zebedee.cloud
 ---------------------------------------
-name          - ZBD
-description   - ZEBEDEE Public Nostr Relay
-pubkey        - 1b11ed41e815234599a52050a6a40c79bdd3bfa3d65e5d4a2c8d626698835d6d
-contact       - andre@zebedee.io
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.4
-limitation    - {'max_message_length': 1048576, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 56) wss://nostr-relay.lnmarkets.com
 ---------------------------------------
@@ -742,14 +734,6 @@ limitation    - None
 ---------------------------------------
 75) wss://nostr.zebedee.cloud
 ---------------------------------------
-name          - ZBD
-description   - ZEBEDEE Public Nostr Relay
-pubkey        - 1b11ed41e815234599a52050a6a40c79bdd3bfa3d65e5d4a2c8d626698835d6d
-contact       - andre@zebedee.io
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.4
-limitation    - {'max_message_length': 1048576, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 76) wss://relay.current.fyi
 ---------------------------------------
@@ -899,24 +883,16 @@ limitation    - None
 ---------------------------------------
 90) wss://relay.nostr.scot
 ---------------------------------------
-name          - nostr.scot relay
-description   - Fast reliable UK relay : low latency nostr for Scotland, the UK and Europe
-pubkey        - a4ec6308a9c3a9e5eb6d02ac4d7ea64701e294c598010d1dd5e53a838aae1bea
-contact       - mailto:yo@nostr.scot
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.9
-limitation    - {'payment_required': False}
 ---------------------------------------
 91) wss://relay.austrich.net
 ---------------------------------------
 name          - strfry default
 description   - This is a strfry instance.
-pubkey        - e07773a92a610a28da20748fdd98bfb5af694b0cad085224801265594a98108a
-contact       - admin@austrich.net
+pubkey        - unset
+contact       - unset
 supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
 software      - git+https://github.com/hoytech/strfry.git
-version       - v27-6bd5393
+version       - v26-13c479d
 limitation    - None
 ---------------------------------------
 92) wss://relay.sendstr.com
@@ -985,7 +961,7 @@ pubkey        - 4ac24d2ee822a34a9881eff526bf71f39704419837e4c14b34642d82e111ed39
 contact       - mailto:raul@piraces.dev
 supported_nips - [5, 9, 11, 12, 15, 16, 19, 20]
 software      - git+https://github.com/piraces/rsslay.git
-version       - 0.5.1
+version       - 0.5.2
 limitation    - None
 ---------------------------------------
 99) wss://sg.qemura.xyz
