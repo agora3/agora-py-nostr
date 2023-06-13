@@ -105,11 +105,15 @@ main lib.
 
 https://github.com/holgern/pynostr
 
+https://github.com/jeffthibault/python-nostr
+
 inspiration
 
 https://github.com/monty888/monstr
 
 https://codeberg.org/mat/nostrfiles
+
+https://github.com/nostr-dev-kit/ndk-cli
 
 ---
 
