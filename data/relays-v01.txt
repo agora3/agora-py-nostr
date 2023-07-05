@@ -1,4 +1,4 @@
-relays INFO - ver.0.1/2023-06-12
+relays INFO - ver.0.1/2023-07-05
 =======================================
 ---------------------------------------
 1) wss://relay.damus.io
@@ -20,7 +20,7 @@ pubkey        - 0fe0b18b4dbf0e0aa40fcd47209b2a49b3431fc453b460efcf45ca0bd16bd6ac
 contact       - info@plebstr.com
 supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
 software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
+version       - 1.25.2
 limitation    - {'max_message_length': 524288, 'max_subscriptions': 8, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 3) wss://relay.nostrplebs.com
@@ -87,15 +87,15 @@ name          - petrkr strfry
 description   - Teting C++ strfry implementation.
 pubkey        - unset
 contact       - nostr.petrkr.net
-supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
+supported_nips - [1, 2, 4, 9, 11, 12, 16, 20, 22, 28, 33, 40]
 software      - git+https://github.com/hoytech/strfry.git
-version       - v113-e4e79af
+version       - 0.9.1-1-gd83001b
 limitation    - None
 ---------------------------------------
 10) wss://nos.lol
 ---------------------------------------
 name          - nos.lol
-description   - Generally accepts events, except spammy ones.
+description   - Generally accepts notes, except spammy ones.
 pubkey        - 9fec72d579baaa772af9e71e638b529215721ace6e0f8320725ecbf9f77f85b1
 contact       - unset
 supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
@@ -105,14 +105,6 @@ limitation    - None
 ---------------------------------------
 11) wss://nostr.anchel.nl
 ---------------------------------------
-name          - nostr-anchel-relay
-description   - Nostr relay server van Anchel.NL
-pubkey        - 60fba31893d809e4957e51d4c57d3e78bf154cc1bd323e979cf7170da0bb8270
-contact       - mailto:msjl@anchel.nl
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.9
-limitation    - {'payment_required': False}
 ---------------------------------------
 12) wss://no.str.cr
 ---------------------------------------
@@ -187,14 +179,6 @@ limitation    - {'auth_required': False, 'max_event_tags': 2000, 'max_limit': 10
 ---------------------------------------
 19) wss://nostr.8e23.net
 ---------------------------------------
-name          - nostr.8e23.net
-description   - None
-pubkey        - 81b501c59a8300cb0b4303e8dc258d56d5a5c4fed7411322119a7640ce060613
-contact       - None
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
-limitation    - None
 ---------------------------------------
 20) wss://nostr.actn.io
 ---------------------------------------
@@ -258,15 +242,6 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 26) wss://nostr.coollamer.com
 ---------------------------------------
-name          - CoolLamer.com Nostr Relay
-description   - Extra fast and reliable nostr relay.
- Want to be verified on domain CoolLamer.com? Write relay admin - LN accepted.
-pubkey        - 1edc9b0e16780c50377144596d901032a57f098b2f42fe6c8a765efb8fedf27b
-contact       - None
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 26]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.7.13
-limitation    - None
 ---------------------------------------
 27) wss://nostr.corebreach.com
 ---------------------------------------
@@ -293,16 +268,8 @@ software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
 version       - 0.8.9
 limitation    - {'payment_required': False}
 ---------------------------------------
-30) wss://nostr.paralelnipolis.cz
+30) wss://nostr.drss.io
 ---------------------------------------
-name          - nostream.your-domain.com
-description   - A nostr relay written in Typescript.
-pubkey        - replace-with-your-pubkey-in-hex
-contact       - operator@your-domain.com
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
-limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 31) wss://nostr.easydns.ca
 ---------------------------------------
@@ -386,14 +353,6 @@ limitation    - None
 ---------------------------------------
 39) wss://nostrical.com
 ---------------------------------------
-name          - nostream.your-domain.com
-description   - A nostr relay written in TypeScript.
-pubkey        - replace-with-your-pubkey
-contact       - operator@your-domain.com
-supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33]
-software      - git+https://github.com/Cameri/nostream.git
-version       - 1.16.0
-limitation    - None
 ---------------------------------------
 40) wss://nostrich.friendship.tw
 ---------------------------------------
@@ -436,7 +395,7 @@ pubkey        - ee11a5dff40c19a555f41fe42b48f00e618c91225622ae37b6c2bb67b76c4e49
 contact       - mailto:mike@mikedilger.com
 supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
 software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
+version       - 0.8.9
 limitation    - {'payment_required': False}
 ---------------------------------------
 44) wss://nostr.milou.lol
@@ -474,6 +433,15 @@ limitation    - None
 ---------------------------------------
 47) wss://nostr.nodeofsven.com
 ---------------------------------------
+name          - Another day, another relay
+description   - 24V 2NC/2NO relay with a fancy LED!
+Switched to NIP-05 only publishing to combat spam
+pubkey        - 106ff79196c303be26452bd01c316b2873adeb7b94f6f7f22398819da36e1c3a
+contact       - mailto:admin@nodeofsven.com
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
+software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
+version       - 0.8.9
+limitation    - {'payment_required': False}
 ---------------------------------------
 48) wss://nostr.ownscale.org
 ---------------------------------------
@@ -510,6 +478,14 @@ limitation    - {'payment_required': False}
 ---------------------------------------
 51) wss://nostr-pub1.southflorida.ninja
 ---------------------------------------
+name          - nostr-pub1.southflorida.ninja
+description   - A public nostr relay hosted in South Florida.
+pubkey        - 5db776f3e7a9ca7cf22b2d469e7a44092f343bb3a25c2c5162a2931d4c696f17
+contact       - troy@southflorida.ninja
+supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
+software      - git+https://github.com/Cameri/nostream.git
+version       - 1.22.6
+limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_filters': 10, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 102400, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': False}
 ---------------------------------------
 52) wss://nostr-pub.wellorder.net
 ---------------------------------------
@@ -638,7 +614,7 @@ pubkey        - dd6c2887a9a36d488f76fd662a979db3dffb93ba080fa7c12e8cf695d3460551
 contact       - nostr-relay@slothy.win
 supported_nips - [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 26, 28, 33, 40]
 software      - git+https://github.com/Cameri/nostream.git
-version       - 1.22.6
+version       - 1.25.2
 limitation    - {'max_message_length': 131072, 'max_subscriptions': 10, 'max_filters': 2500, 'max_limit': 5000, 'max_subid_length': 256, 'min_prefix': 4, 'max_event_tags': 2500, 'max_content_length': 65536, 'min_pow_difficulty': 0, 'auth_required': False, 'payment_required': True}
 ---------------------------------------
 66) wss://nostr.supremestack.xyz
@@ -654,10 +630,10 @@ limitation    - {'max_message_length': 524288, 'max_subscriptions': 10, 'max_fil
 ---------------------------------------
 67) wss://nostr.swiss-enigma.ch
 ---------------------------------------
-name          - nostr-rs-relay-cercatrova
-description   - Self-hosted nostr-rs-relay in Switzerland. (The connection runs via a reverse proxy) 16GB RAM, 4 Cores and 80GB of SSD.
-pubkey        - 9984188a6578eb513fddcf658f389dbd532e54b82b628ad36666f7aa8f731b79
-contact       - cerca@swiss-enigma.ch
+name          - Unnamed nostr-rs-relay
+description   - None
+pubkey        - None
+contact       - None
 supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
 software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
 version       - 0.8.8
@@ -687,14 +663,6 @@ limitation    - {'payment_required': False}
 ---------------------------------------
 70) wss://nostr-verif.slothy.win
 ---------------------------------------
-name          - slothy_nostr-rs-relay_verified
-description   - An experimental nostr relay on OK hardware. Writes are NIP-05 Verified ONLY.
-pubkey        - 246ca9df2cea8a42e647ea9597fb21e18737d46c4114773214a929e9799031b8
-contact       - mailto:nostr-relay@slothy.win
-supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33, 40, 42]
-software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
-version       - 0.8.8
-limitation    - None
 ---------------------------------------
 71) wss://nostr.vulpem.com
 ---------------------------------------
@@ -814,17 +782,25 @@ limitation    - None
 ---------------------------------------
 83) wss://relay.nostr.bg
 ---------------------------------------
-name          - strfry:relay.nostr.bg
+name          - relay.nostr.bg powered by strfry
 description   - Nostr Public Relay
 pubkey        - dcdd29d5f71beaa1c362e6aa384dd073fdcca1155caccd29f82d43acf8be7598
 contact       - dcdd29d5f71beaa1c362e6aa384dd073fdcca1155caccd29f82d43acf8be7598
-supported_nips - [1, 9, 11, 12, 15, 16, 20, 22]
+supported_nips - [1, 2, 4, 9, 11, 12, 16, 20, 22, 28, 33, 40]
 software      - git+https://github.com/hoytech/strfry.git
-version       - v126-fbbfc3a
+version       - 0.9.1
 limitation    - None
 ---------------------------------------
 84) wss://nostramsterdam.vpx.moe
 ---------------------------------------
+name          - vpx-amsterdam
+description   - Hosting provided by 12vpx.com.
+pubkey        - 6D3832541179FB918CF24A5AA7693880BF345FE67AD5B5CC63EE79E238CB389D
+contact       - None
+supported_nips - [1, 2, 9, 11, 12, 15, 16, 20, 22, 33]
+software      - https://git.sr.ht/~gheartsfield/nostr-rs-relay
+version       - 0.8.5
+limitation    - None
 ---------------------------------------
 85) wss://relay.nostrgraph.net
 ---------------------------------------
@@ -961,7 +937,7 @@ pubkey        - 4ac24d2ee822a34a9881eff526bf71f39704419837e4c14b34642d82e111ed39
 contact       - mailto:raul@piraces.dev
 supported_nips - [5, 9, 11, 12, 15, 16, 19, 20]
 software      - git+https://github.com/piraces/rsslay.git
-version       - 0.5.2
+version       - 0.5.3
 limitation    - None
 ---------------------------------------
 99) wss://sg.qemura.xyz
